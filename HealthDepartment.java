@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
@@ -72,12 +73,16 @@ public class HealthDepartment {
 			frame.add(vardiyadegistir);
 			frame.add(expenses);
 			frame.setVisible(true);
-			expenses.addActionListener(new ActionListener()
-			
-			{
+			expenses.addActionListener(new ActionListener(){
 				public void actionPerformed(ActionEvent event)
 				{
 					expenses();
+				}
+			});
+			vardiyadegistir.addActionListener(new ActionListener(){
+				public void actionPerformed(ActionEvent event)
+				{
+					vardiyaDegistir();
 				}
 			});
 		}
@@ -132,8 +137,61 @@ public class HealthDepartment {
 
 	}
 	
+	public void vardiyaDegistir() {
+		JFrame vardiya = new JFrame("Vardiya Degistirme");
+		vardiya.setSize(500,500);
+		vardiya.setLayout(null);
+		
+		JButton change = new JButton("Change Shift");
+		JLabel empIDLab = new JLabel("Employee ID:");
+		JTextField empID = new JTextField();
+		JLabel newShiftLab = new JLabel("Select shift to change:");
+		JComboBox<String> newShift = new JComboBox<String>();
+		newShift.addItem("Morning");
+		newShift.addItem("Evening");
+		newShift.addItem("Night");
+		newShift.setSelectedIndex(0);
+		
+		empIDLab.setBounds(20, 60, 100, 30);
+		empID.setBounds(130, 60, 100, 30);
+		newShiftLab.setBounds(20, 100, 100, 30);
+		newShift.setBounds(130, 100, 100, 30);
+		change.setBounds(20, 150, 160, 30);
+		vardiya.add(empIDLab);
+		vardiya.add(empID);
+		vardiya.add(newShiftLab);
+		vardiya.add(newShift);
+		vardiya.add(change);
+		vardiya.setVisible(true);
+		change.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent event)
+			{
+				try {
+					int selectedVardiya = newShift.getSelectedIndex();
+					setVardiya(empID.getText(),selectedVardiya);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+	
+	public void setVardiya(String id, int shift) throws SQLException {
+		Connection();
+		
+		System.out.println("shift: " + shift);
+		int update=0;
+		String a = "UPDATE employees SET shift = " + shift + " WHERE emp_id =" + " 11009";
+		pst = con.prepareStatement(a);
+
+		update = pst.executeUpdate();
+		System.out.println(update);
+		System.out.println("Burak");
+	}
+	
 	public void expenses() {
-		JFrame expenses = new JFrame();
+		JFrame expenses = new JFrame("Health Department Expenses");
 		expenses.setSize(700,700);
 		expenses.setLayout(new GridLayout(6,6));
 		
@@ -144,11 +202,11 @@ public class HealthDepartment {
 		String maskTotalPrice= "";
 		
 		try {
-			pkTotalPrice = "Painkiller expenses: "+ Integer.toString(pk_amount()[0]*pk_price()[0]);
-			bandageTotalPrice = "Bandage expenses: "+ Integer.toString(bandage_amount()[0]*bandage_price()[0]);
-			syringeTotalPrice = "Syringe expenses: "+ Integer.toString(syringe_amount()[0]*syringe_price()[0]);
-			frTotalPrice = "Fever Reducer expenses: "+ Integer.toString(fr_amount()[0]*fr_price()[0]);
-			maskTotalPrice = "Mask expenses: "+ Integer.toString(mask_amount()[0]*mask_price()[0]);
+			pkTotalPrice = "Painkiller expenses: "+ Integer.toString(pk_amount()[0]*pk_price()[0])+" TL";
+			bandageTotalPrice = "Bandage expenses: "+ Integer.toString(bandage_amount()[0]*bandage_price()[0])+" TL";
+			syringeTotalPrice = "Syringe expenses: "+ Integer.toString(syringe_amount()[0]*syringe_price()[0])+" TL";
+			frTotalPrice = "Fever Reducer expenses: "+ Integer.toString(fr_amount()[0]*fr_price()[0])+" TL";
+			maskTotalPrice = "Mask expenses: "+ Integer.toString(mask_amount()[0]*mask_price()[0])+" TL";
 
 			
 		} catch (SQLException e) {
