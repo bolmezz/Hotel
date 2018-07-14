@@ -208,7 +208,7 @@ public class CleaningDepartment extends JFrame implements ActionListener {
 
 			con = DriverManager.getConnection(
 					"jdbc:postgresql://localhost/Hotel", "postgres",
-					"123412");
+					"08040094");
 
 
 		} catch (SQLException e) {
@@ -259,7 +259,7 @@ public class CleaningDepartment extends JFrame implements ActionListener {
 
 		GridLayout layout = new GridLayout(6,6);
 		frame2 = new JFrame("Dirty Rooms");
-		frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame2.setSize(500,500);
 		frame2.setLayout(layout);
 
@@ -476,7 +476,7 @@ public class CleaningDepartment extends JFrame implements ActionListener {
 
 		GridLayout layout = new GridLayout(6,8);
 		frame3 = new JFrame("Expenses");
-		frame3.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//frame3.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame3.setSize(500,500);
 		frame3.setLayout(layout);
 
@@ -582,7 +582,7 @@ public class CleaningDepartment extends JFrame implements ActionListener {
 
 		GridLayout layout = new GridLayout(16,16);
 		frame4 = new JFrame("Add New Employee");
-		frame4.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//frame4.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame4.setSize(1000,700);
 		frame4.setLayout(layout);
 
