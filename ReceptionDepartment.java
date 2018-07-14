@@ -53,10 +53,6 @@ public class ReceptionDepartment {
 		frame.setSize(500,500);
 		frame.setLayout(layout);
 
-		frame.setVisible(true);
-		frame.add(check_in);
-		frame.add(check_out);
-
 		if(isMgr)
 		{
 			frame.setVisible(true);
