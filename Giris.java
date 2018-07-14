@@ -160,7 +160,7 @@ public class Giris {
 	{
 		
 		
-		int user = Integer.parseInt(JOptionPane.showInputDialog("ID : "));{
+		int user = Integer.parseInt(JOptionPane.showInputDialog(null,"ID : ","Giriþ",JOptionPane.INFORMATION_MESSAGE));{
 			if(11000<user && user<17008) {
 			
 			ArrayList<Integer> ids = IDs();
