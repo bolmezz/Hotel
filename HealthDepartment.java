@@ -15,7 +15,7 @@ import javax.swing.JTextField;
 
 public class HealthDepartment {
 
-	private JButton calisanEkle;
+	private JButton izinGunu;
 	private JButton hastaEkle;
 	private JButton vardiyadegistir;
 	private JButton expenses;
@@ -31,7 +31,7 @@ public class HealthDepartment {
 
 			con = DriverManager.getConnection(
 					"jdbc:postgresql://localhost/Hotel", "postgres",
-					"08040094");
+					"123412");
 
 
 		} catch (SQLException e) {
@@ -48,12 +48,13 @@ public class HealthDepartment {
 	
 	public void showGUI5(boolean isMgr) {
 	
-		calisanEkle = new JButton("Calisan Ekle");
-		hastaEkle = new JButton("Hasta Ekle");
-		vardiyadegistir = new JButton("Vardiya Degistir");
+		izinGunu = new JButton("Set Day Off");
+		hastaEkle = new JButton("Add Patient");
+		vardiyadegistir = new JButton("Change Shift");
 		expenses = new JButton("Expenses");
 		save = new JButton("Save");
-
+		
+		
 		GridLayout layout = new GridLayout(6,6);
 		layout.setHgap(60);
 		layout.setVgap(60);
@@ -69,7 +70,7 @@ public class HealthDepartment {
 
 		if(isMgr)
 		{
-			frame.add(calisanEkle);
+			frame.add(izinGunu);
 			frame.add(vardiyadegistir);
 			frame.add(expenses);
 			frame.setVisible(true);
@@ -85,6 +86,12 @@ public class HealthDepartment {
 					vardiyaDegistir();
 				}
 			});
+			izinGunu.addActionListener(new ActionListener(){
+				public void actionPerformed(ActionEvent event)
+				{
+					izinGunuDegistir();
+				}
+			});
 		}
 		
 		else {
@@ -95,48 +102,120 @@ public class HealthDepartment {
 			{
 				public void actionPerformed(ActionEvent event)
 				{	
-					JTextField name = new JTextField();
-					JTextField last_name = new JTextField();
+					JTextField tc = new JTextField();
 					JTextField tel_no = new JTextField();
 					JTextField description = new JTextField();
 			
 					
-					JLabel name_Lab = new JLabel("Name : ");
-					JLabel lastName_Lab = new JLabel("Last Name : ");
+					JLabel tc_Lab = new JLabel("TC No : ");
 					JLabel telNo_Lab = new JLabel("Tel No : ");
 					JLabel description_Lab = new JLabel("Description : ");
 					
-					name_Lab.setBounds(20, 60, 100, 30);
-					lastName_Lab.setBounds(20, 100, 100, 30);
+					tc_Lab.setBounds(20, 60, 100, 30);
 					telNo_Lab.setBounds(20, 140, 100, 30);
 					description_Lab.setBounds(20, 180, 100, 30);
 					
 					
-					name.setBounds(120, 60, 150, 30);
-					last_name.setBounds(120, 100, 150, 30);
+					tc.setBounds(120, 60, 150, 30);
 					tel_no.setBounds(120, 140, 150, 30);
 					description.setBounds(120, 180, 150, 30);
 					save.setBounds(100, 250, 100, 30);
 					
-					hastaFrame.add(name);
-					hastaFrame.add(last_name);
+					hastaFrame.add(tc);
 					hastaFrame.add(tel_no);
 					hastaFrame.add(description);
 					
-					hastaFrame.add(name_Lab);
-					hastaFrame.add(lastName_Lab);
+					hastaFrame.add(tc_Lab);
 					hastaFrame.add(telNo_Lab);
 					hastaFrame.add(description_Lab);
 					hastaFrame.add(save);
 					
 					hastaFrame.setVisible(true);			
 
+					save.addActionListener(new ActionListener(){
+						public void actionPerformed(ActionEvent event)
+						{
+							String tcInfo = tc.getText();
+							String desc = description.getText();
+							String telNoInfo = tel_no.getText();
+							kayitAl(tcInfo, desc, telNoInfo);
+							hastaFrame.setVisible(false);
+						}
+					});
 				}
 			});
 		}
 
 	}
+	public void kayitAl(String tc, String desc, String telNo) {
+		Connection();
+		
+		String a = "INSERT INTO health_service (d_comment, p_tc, p_telno) VALUES ('"+ desc + "', '" + tc + "', '" + telNo + "')";
+		try {
+			int update;
+			pst = con.prepareStatement(a);
+			System.out.println(pst);
+			update = pst.executeUpdate();
+			System.out.println("updated");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	public void izinGunuDegistir() {
+		JFrame vardiya = new JFrame("Shift Changer");
+		vardiya.setSize(500,500);
+		vardiya.setLayout(null);
+		
+		JButton change = new JButton("Change Day-Off");
+		JLabel empIDLab = new JLabel("Employee ID:");
+		JTextField empID = new JTextField();
+		JLabel newDayLab = new JLabel("Select day to change:");
+		JComboBox<String> newDay = new JComboBox<String>();
+		newDay.addItem("Monday");
+		newDay.addItem("Tuesday");
+		newDay.addItem("Wednesday");
+		newDay.addItem("Thursday");
+		newDay.addItem("Friday");
+		newDay.addItem("Saturday");
+		newDay.addItem("Sunday");
+		newDay.setSelectedIndex(0);
+		
+		empIDLab.setBounds(20, 60, 100, 30);
+		empID.setBounds(130, 60, 100, 30);
+		newDayLab.setBounds(20, 100, 100, 30);
+		newDay.setBounds(130, 100, 100, 30);
+		change.setBounds(20, 150, 160, 30);
+		vardiya.add(empIDLab);
+		vardiya.add(empID);
+		vardiya.add(newDayLab);
+		vardiya.add(newDay);
+		vardiya.add(change);
+		vardiya.setVisible(true);
+		change.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent event)
+			{
+				try {
+					String selectedDayOff = (String) newDay.getSelectedItem();
+					setIzinGunu(empID.getText(),selectedDayOff);
+					vardiya.setVisible(false);
+
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
+	}
 	
+	public void setIzinGunu(String id, String dayOff) throws SQLException {
+		Connection();
+		
+		int update=0;
+		String a = "UPDATE employees SET day_offs = '" + dayOff + "' WHERE emp_id = " + id;
+		pst = con.prepareStatement(a);
+		update = pst.executeUpdate();
+	}
 	public void vardiyaDegistir() {
 		JFrame vardiya = new JFrame("Vardiya Degistirme");
 		vardiya.setSize(500,500);
@@ -169,6 +248,7 @@ public class HealthDepartment {
 				try {
 					int selectedVardiya = newShift.getSelectedIndex();
 					setVardiya(empID.getText(),selectedVardiya);
+					vardiya.setVisible(false);
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -180,14 +260,10 @@ public class HealthDepartment {
 	public void setVardiya(String id, int shift) throws SQLException {
 		Connection();
 		
-		System.out.println("shift: " + shift);
 		int update=0;
-		String a = "UPDATE employees SET shift = " + shift + " WHERE emp_id =" + " 11009";
+		String a = "UPDATE employees SET shift = " + shift + " WHERE emp_id = " + id;
 		pst = con.prepareStatement(a);
-
 		update = pst.executeUpdate();
-		System.out.println(update);
-		System.out.println("Burak");
 	}
 	
 	public void expenses() {

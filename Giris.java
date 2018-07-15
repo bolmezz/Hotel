@@ -46,7 +46,7 @@ public class Giris {
 
 			con = DriverManager.getConnection(
 					"jdbc:postgresql://localhost/Hotel", "postgres",
-					"08040094");
+					"123412");
 
 
 		} catch (SQLException e) {
