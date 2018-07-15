@@ -13,6 +13,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -25,13 +26,13 @@ import javax.swing.plaf.ComboBoxUI;
 public class CleaningDepartment extends JFrame implements ActionListener {
 
 	private JButton kirliodalar;
-	private JButton calisanekle;
 	private JButton vardiyadegistir;
 	private JButton expenses;
 	private JFrame frame;
 	private JFrame frame2;
 	private JFrame frame3;
 	private JFrame frame4;
+	private JFrame frame5;
 
 
 
@@ -227,33 +228,241 @@ public class CleaningDepartment extends JFrame implements ActionListener {
 	//kirli odalarý listeler;
 	//cleanlines == 0 = KÝRLÝ ODA
 
-	public int[] dirtyRooms() throws SQLException {
+	public ArrayList<Integer> dirtyRooms() throws SQLException {
 
 		Connection();
 
-		int[] rooms =new int[30];
-		pst = con.prepareStatement("SELECT room_no FROM rooms where cleanliness = 1");
+		//int[] rooms =new int[30];
+		
+		ArrayList<Integer> rooms = new ArrayList<>();
+		pst = con.prepareStatement("SELECT room_no FROM rooms where cleanliness = 0 Order BY room_no ASC");
 		rs = pst.executeQuery();
 
 		int count =-1;
 		while (rs.next()) {
 
 			count ++;
-			rooms[count] = rs.getInt("room_no");
+			rooms.add(rs.getInt("room_no"));
 
 
 		}
 		return rooms;
 	}
+	
+	
+	
+	//odanýn cleanliness durumunu 0 yapar. (yani oda artýk temiz göürünür);
+	
+	public void cleanRoom(int roomID) throws SQLException
+	{
+		Connection();
+
+		int roomNo;
+		
+		roomNo =dirtyRooms().get(roomID);
+		
+
+		
+		Statement st =  (Statement) con.createStatement();
+		((java.sql.Statement) st).executeUpdate("UPDATE rooms SET cleanliness ="+1+" Where room_no ="+roomNo);
+		
+		JOptionPane.showMessageDialog(frame5, "Room has been cleaned !");
 
 
+		frame5.dispose();
+		dirty();
 
+		
+		
+	}
+	
+	
+	//odadaki stok sayýsýný 1 arttýrýr;
+	
+	public void addStock(int roomID, int towelA, int soapA, int waterA, int shampooA) throws SQLException
+	{
+		
+		Connection();
+
+		int roomNo =0;
+		
+		roomNo =dirtyRooms().get(roomID);
+
+		
+		Statement st =  (Statement) con.createStatement();
+		((java.sql.Statement) st).executeUpdate("UPDATE rooms SET towel_room="+(towelA+1)+",water_room ="+(waterA+1)+",soap_room ="+(soapA+1)+
+				",shampoo_room ="+(shampooA+1)+" Where room_no ="+roomNo);
+		
+
+
+		
+	}
+
+	
+	public int towel =0;
+	public int soap =0;
+	public int water =0;
+	public int shampoo=0;
+
+	
+	
+	//kirli odanýn stok bilgisi gösterir;
+	
+	public void roomDetail(int roomID) throws SQLException
+	{
+		Connection();
+
+		int roomNo;
+		
+		roomNo =dirtyRooms().get(roomID);
+		
+
+		
+		pst = con.prepareStatement("SELECT towel_room FROM rooms where room_no = "+roomNo);
+		rs = pst.executeQuery();
+		
+		while(rs.next()) 
+			towel = rs.getInt("towel_room");
+
+		
+		pst = con.prepareStatement("SELECT soap_room FROM rooms where room_no = "+roomNo);
+		rs = pst.executeQuery();
+		
+		while(rs.next())
+			soap = rs.getInt("soap_room");
+		
+		pst = con.prepareStatement("SELECT water_room FROM rooms where room_no = "+roomNo);
+		rs = pst.executeQuery();
+		
+		while(rs.next())
+			water = rs.getInt("water_room");
+		
+		pst = con.prepareStatement("SELECT shampoo_room FROM rooms where room_no = "+roomNo);
+		rs = pst.executeQuery();
+		
+		while(rs.next())
+			shampoo = rs.getInt("shampoo_room");
+		
+	
+	
+		frame5 = new JFrame("Room : "+roomNo);
+		//frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame5.setSize(500,500);
+		frame5.setLayout(null);
+		
+
+		
+		JLabel toweltext = new JLabel("Towel amount :");
+		JLabel soaptext = new JLabel("Soap amount :");
+		JLabel watertext = new JLabel("Water amount :");
+		JLabel shampootext = new JLabel("Shampoo amount :");
+		
+	
+	
+		
+		JTextField towelT = new JTextField();
+		JTextField soapT = new JTextField();
+		JTextField shampooT = new JTextField();
+		JTextField waterT = new JTextField();
+		
+		toweltext.setBounds(20, 60, 100, 30);
+		towelT.setBounds(130, 60, 100, 30);
+		
+		soaptext.setBounds(20, 100, 100, 30);
+		soapT.setBounds(130, 100, 100, 30);
+		
+		watertext.setBounds(20, 140, 100, 30);
+		waterT.setBounds(130, 140, 100, 30);
+		
+		shampootext.setBounds(20, 180, 100, 30);
+		shampooT.setBounds(130, 180, 100, 30);
+		
+		towelT.setText(towel+"");
+		soapT.setText(soap+"");
+		waterT.setText(water+"");
+		shampooT.setText(shampoo+"");
+		
+		JButton ekle = new JButton("Ekle");
+		JButton kaydet = new JButton("Temizliði Bitir");
+		
+		ekle.setBounds(110, 240, 120, 30);
+		kaydet.setBounds(110, 280, 120, 30);
+		
+		frame5.add(toweltext);
+		frame5.add(towelT);
+	
+		
+		frame5.add(soaptext);
+		frame5.add(soapT);
+	
+		
+		frame5.add(watertext);
+		frame5.add(waterT);
+	
+		
+		frame5.add(shampootext);
+		frame5.add(shampooT);
+		
+		frame5.add(ekle);
+		frame5.add(kaydet);
+		
+		frame5.setVisible(true);
+		ekle.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				
+				try {
+					
+					addStock(roomID,towel,soap,water,shampoo);
+					
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				
+				frame5.dispose();
+				
+				try {
+					roomDetail(roomID);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+	
+				
+			}
+		});
+		
+		
+		kaydet.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				try {
+					
+					cleanRoom(roomID);
+					
+					
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+			}
+		});
+			
+		
+	}
 
 
 
 	// kirli odalarý listeler ;
 
-	public JFrame dirty()
+	public void dirty() throws SQLException
 	{
 
 
@@ -266,12 +475,15 @@ public class CleaningDepartment extends JFrame implements ActionListener {
 
 
 
-		int[] room = new int[30];
+		int[] room = new int[dirtyRooms().size()];
 
-		String[] room2 = new String[30];
+		String[] room2 = new String[dirtyRooms().size()];
 
 		try {
-			room = dirtyRooms();
+			
+			for (int i = 0; i<dirtyRooms().size();i++)
+			room[i] = dirtyRooms().get(i);
+			
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -286,17 +498,39 @@ public class CleaningDepartment extends JFrame implements ActionListener {
 
 		JComboBox cmbRooms = new JComboBox(room2);
 		JLabel lblText = new JLabel();
-
-
-		cmbRooms.setSelectedIndex(1);
-		cmbRooms.addActionListener(this);
+		
+	
+		cmbRooms.setSelectedIndex(0);
+		cmbRooms.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				
+				int selectedRoom = cmbRooms.getSelectedIndex();
+				
+				try {
+					
+					roomDetail(selectedRoom);
+					frame2.dispose();
+					
+				} catch (SQLException e) {
+					
+					e.printStackTrace();
+				}
+				
+			}
+		});
+		
+		
+		
+		
 		frame2.add(cmbRooms);
 		frame2.add(lblText);
 
 
 
 		frame2.setVisible(true);
-		return frame2;
+		
 
 	}
 
@@ -517,196 +751,9 @@ public class CleaningDepartment extends JFrame implements ActionListener {
 	}
 
 
-
-	public void add_emp_DB(int id1, String name, String lastName, String shift1, String days, String tc1, String addr, String sal1, String gender1, String bdate, String dno1) throws SQLException
-	{
-
-
-		int sal = Integer.parseInt(sal1);
-		int gen = Integer.parseInt(gender1);
-		int dno = Integer.parseInt(dno1);
-		int shift = Integer.parseInt(shift1);
-		String f_name = name;
-		String l_name = lastName;
-		String dayOf = days;
-		String birth_date = bdate;
-		String address = addr;
-		int id = id1;
-
-
-
-
-		// tc String veriliyo , db'de sorun çýkmýyor ama.
-		// is_manager default olarak 0 atanýyor
-
-		Statement st =  (Statement) con.createStatement();
-		((java.sql.Statement) st).executeUpdate("INSERT INTO employees VALUES ("+id+",'"+f_name+"','"+l_name+"',"+shift+",'"+dayOf+"',"
-				+tc1+",'"+address+"',"+sal+","+gen+",'"+birth_date+"',0,"+dno+");");
-
-
-		JOptionPane.showMessageDialog(frame4, "Kaydedildi !");
-
-		// BURDAN SONRA KAYIT EKRANI KAPANMALI
-
-
-	}
-
-
-
-	// Numarasý verilen departmandaki en yüksek no'lu ID'yi döner;
-
-	public int[] generate_ID(int dept_no) throws SQLException
-	{
-
-		Connection();
-
-		int[] ID = new int[1];
-
-		pst = con.prepareStatement("SELECT max(emp_id) FROM employees WHERE dno ="+dept_no);
-		rs = pst.executeQuery();
-
-		while(rs.next())
-			ID[0] = rs.getInt("max");
-
-		return ID;
-
-
-	}
-
-
-	public JFrame add_emp() throws SQLException
-	{
-
-
-		Connection();
-
-		GridLayout layout = new GridLayout(16,16);
-		frame4 = new JFrame("Add New Employee");
-		//frame4.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame4.setSize(1000,700);
-		frame4.setLayout(layout);
-
-
-		JTextField fname = new JTextField();
-		JTextField lname = new JTextField();
-		JTextField tcno = new JTextField();
-		JTextField addr = new JTextField();
-		JTextField salary = new JTextField();
-		JTextField gender = new JTextField();
-		JTextField bdate = new JTextField();
-		JTextField deptNo = new JTextField();
-		JTextField dayof = new JTextField();
-		JTextField shift1 = new JTextField();
-
-		JButton save = new JButton("Kaydet");
-		save.setSize(20, 20);
-
-
-
-
-		JLabel label1 = new JLabel("Ýsim :");
-		JLabel label2 = new JLabel("Soyisim :");
-		JLabel label3 = new JLabel("Tc No :");
-		JLabel label4 = new JLabel("Adres :");
-		JLabel label5 = new JLabel("Salary :");
-		JLabel label6 = new JLabel("Gender (1/0):");
-		JLabel label7 = new JLabel("Doðum Tarihi (yy-aa-gg):");
-		JLabel label8 = new JLabel("Departman No :");
-		JLabel label9 = new JLabel("Shift :");
-		JLabel label10 = new JLabel("Day Offs :");
-
-
-
-
-
-
-		frame4.add(label1);
-		frame4.add(fname);
-
-		frame4.add(label2);
-		frame4.add(lname);
-
-		frame4.add(label3);
-		frame4.add(tcno);
-
-		frame4.add(label4);
-		frame4.add(addr);
-
-		frame4.add(label5);
-		frame4.add(salary);
-
-		frame4.add(label6);
-		frame4.add(gender);
-
-		frame4.add(label7);
-		frame4.add(bdate);
-
-		frame4.add(label8);
-		frame4.add(deptNo);
-
-		frame4.add(label9);
-		frame4.add(shift1);
-
-		frame4.add(label10);
-		frame4.add(dayof);
-
-		frame4.add(save);
-
-
-
-
-
-
-		save.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-
-
-				String f_name = fname.getText();
-				String l_name = lname.getText();
-				String tc_no = tcno.getText();
-				String address = addr.getText();
-				String salary1 = salary.getText();
-				String gender1 = gender.getText();
-				String birth_date = bdate.getText();
-				String d_no = deptNo.getText();
-				String dayof1 = dayof.getText();
-				String shift = shift1.getText();
-
-
-				try {
-
-					add_emp_DB(generate_ID(Integer.parseInt(d_no))[0]+1,f_name, l_name,shift,dayof1,tc_no, address, salary1, gender1, birth_date, d_no);
-
-				} catch (SQLException e1) {
-
-					e1.printStackTrace();
-				}
-
-			}
-		});
-
-
-
-
-		frame4.setVisible(true);
-
-
-		return frame4;
-	}
-
-
-
-
-
-
-
-
 	public void showGUI1(boolean isMgr) throws SQLException {
 
 		kirliodalar = new JButton("Kirli Odalar");
-		calisanekle = new JButton("Calisan Ekle");
 		vardiyadegistir = new JButton("Vardiya Degistir");
 		expenses = new JButton("Expenses");
 
@@ -728,7 +775,6 @@ public class CleaningDepartment extends JFrame implements ActionListener {
 		if(isMgr)
 		{
 			frame.setVisible(true);
-			frame.add(calisanekle);
 			frame.add(vardiyadegistir);
 			frame.add(expenses);
 			frame.add(kirliodalar);
@@ -740,7 +786,14 @@ public class CleaningDepartment extends JFrame implements ActionListener {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 
-					dirty();
+					try {
+						
+						dirty();
+						
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 
 				}				
 			});
@@ -761,23 +814,6 @@ public class CleaningDepartment extends JFrame implements ActionListener {
 				}				
 			});
 
-			calisanekle.addActionListener(new ActionListener() {
-
-				@Override
-				public void actionPerformed(ActionEvent e) {
-
-					try {
-						add_emp();
-					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-
-				}				
-			});
-
-
-
 
 
 		}//if(isMng)
@@ -794,7 +830,14 @@ public class CleaningDepartment extends JFrame implements ActionListener {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 
-					dirty();
+					try {
+						
+						dirty();
+						
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 
 				}				
 			});

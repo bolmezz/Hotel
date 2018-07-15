@@ -10,11 +10,15 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
+import javax.swing.JTextField;
 
+import javassist.tools.framedump;
 import net.bytebuddy.asm.Advice.Enter;
 
 import java.awt.GridLayout;
 import java.awt.HeadlessException;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.Connection;
 
 public class Giris {
@@ -61,24 +65,7 @@ public class Giris {
 		}
 	}
 
-	//manager'ýn girdiði þifrenin doðruluðunun kontro edilmesi;
-/*	
-    private static boolean isPasswordCorrect(char[] input) {
-        boolean isCorrect = true;
-        char[] correctPassword = { 'a', 'd', 'm', 'i', 'n'};
 
-        if (input.length != correctPassword.length) {
-            isCorrect = false;
-        } else {
-            isCorrect = Arrays.equals (input, correctPassword);
-        }
-
-        //Zero out the password.
-        Arrays.fill(correctPassword,'0');
-
-        return isCorrect;
-    }
-*/
 	
 	public static void main(String args[]) throws SQLException
 	{
@@ -144,8 +131,9 @@ public class Giris {
 		TransportationDepartment td = new TransportationDepartment();
 		EntertainmentDepartment ed = new EntertainmentDepartment();
 		HealthDepartment hd = new HealthDepartment();
+		GeneralManager gm = new GeneralManager();
 		
-		metod(cd,rd,resd,sd,td,ed,hd);
+		metod(cd,rd,resd,sd,td,ed,hd,gm);
 
 	
 
@@ -156,12 +144,33 @@ public class Giris {
 	
 	
 	public void metod(CleaningDepartment cd, ReceptionDepartment rd, RestaurantDepartment resd,
-			SecurityDepartment sd, TransportationDepartment td, EntertainmentDepartment ed, HealthDepartment hd) throws HeadlessException, SQLException
+			SecurityDepartment sd, TransportationDepartment td, EntertainmentDepartment ed, HealthDepartment hd, GeneralManager gm) throws HeadlessException, SQLException
 	{
 		
 		
+		// general admin'den þifre istenmesi;
+		String passwrd = "admin";
+		
+		JFrame f=new JFrame("Password");    
+	     final JLabel label = new JLabel();            
+	     label.setBounds(20,150, 200,50);  
+	     final JPasswordField value = new JPasswordField();   
+	     value.setBounds(100,75,100,30);   
+	        JLabel l2=new JLabel("Password:");    
+	        l2.setBounds(20,75, 80,30);    
+	        JButton b = new JButton("Login");  
+	        b.setBounds(100,120, 80,30);    
+	        final JTextField text = new JTextField();  
+	        text.setBounds(100,20, 100,30);    
+	                f.add(value); f.add(l2); f.add(b);  
+	                f.setSize(300,300);    
+	                f.setLayout(null);   
+	                f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	                
+	                   
+		
 		int user = Integer.parseInt(JOptionPane.showInputDialog(null,"ID : ","Giriþ",JOptionPane.INFORMATION_MESSAGE));{
-			if(11000<user && user<17008) {
+			if(11000<user && user<17008 || user ==10000) {
 			
 			ArrayList<Integer> ids = IDs();
 			
@@ -170,6 +179,52 @@ public class Giris {
 
 				//girilen id db'deyse hangi dept olduðu bulunur
 				if(user == ids.get(i) ) {
+					
+					if(user == 10000) // general man.
+					{
+						System.out.println("General Manager");
+						
+						 f.setVisible(true); 
+						 
+						 b.addActionListener(new ActionListener() {
+							
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								
+								String data = new String(value.getPassword());
+								
+								if(data.equals(passwrd))
+								{
+									try {
+										
+										gm.showGui10();
+										
+									} catch (SQLException e1) {
+										
+										e1.printStackTrace();
+									}
+								}//if
+								
+								else
+								{
+									try {
+										
+										f.dispose();
+										metod(cd, rd, resd, sd, td, ed, hd, gm);
+										
+									} catch (HeadlessException | SQLException e1) {
+										
+										e1.printStackTrace();
+									}
+								}
+								
+							}//action
+						});
+						
+					
+						
+						
+					}//if user = general manager
 
 					if(user/1000 == 11) {//cleaning Dept.
 
@@ -210,10 +265,11 @@ public class Giris {
 								td.showGUI2(false);
 								
 							}
-							
-						}
+						
 						System.out.println("Transport");
 						break;
+						}
+						
 					}
 					else if(user/1000 == 13) {//Entertainment Dept.
 
@@ -337,7 +393,7 @@ public class Giris {
 				else 
 				{
 					
-					metod(cd,rd,resd,sd,td,ed,hd);
+					metod(cd,rd,resd,sd,td,ed,hd,gm);
 
 
 				}
