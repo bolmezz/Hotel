@@ -31,7 +31,7 @@ public class HealthDepartment {
 
 			con = DriverManager.getConnection(
 					"jdbc:postgresql://localhost/Hotel", "postgres",
-					"123412");
+					"08040094");
 
 
 		} catch (SQLException e) {

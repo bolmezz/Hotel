@@ -38,10 +38,14 @@ public class GeneralManager extends JFrame implements ActionListener {
 	private JButton managerAtama;
 	private JButton expenses;
 	private JButton dismiss;
+	private JButton showRecord;
 	private JFrame frame;
 	private JFrame frame2;
 	private JFrame frame3;
 	private JFrame frame4;
+	private JFrame frame5;
+	private JFrame frame6;
+	private JFrame frame7;
 
 	private  void Connection() {
 
@@ -139,6 +143,15 @@ public class GeneralManager extends JFrame implements ActionListener {
 
 	}
 
+	
+	public void addHistory(String name, String lname1, String tc1, int id1, String s1, String f1) throws SQLException
+	{
+		
+		Statement st =  (Statement) con.createStatement();
+		((java.sql.Statement) st).executeUpdate("INSERT INTO emp_history (emp_id,fname,lname,tc,start_date,finidh_date) "
+				+ "VALUES ("+id1+",'"+name+"','"+lname1+"',"+"'"+tc1+"','"+s1+"','"+f1+"');");
+		
+	}
 
 
 
@@ -148,11 +161,11 @@ public class GeneralManager extends JFrame implements ActionListener {
 
 		Connection();
 
-		GridLayout layout = new GridLayout(16,16);
+		//GridLayout layout = new GridLayout(16,16);
 		frame2 = new JFrame("Add New Employee");
 		//frame4.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame2.setSize(1000,700);
-		frame2.setLayout(layout);
+		frame2.setSize(600,700);
+		frame2.setLayout(null);
 
 
 		JTextField fname = new JTextField();
@@ -184,6 +197,17 @@ public class GeneralManager extends JFrame implements ActionListener {
 		JLabel label10 = new JLabel("Day Offs :");
 
 
+		label1.setBounds(20, 60, 160, 30); fname.setBounds(160, 60, 120, 30);
+		label2.setBounds(20, 100, 160, 30); lname.setBounds(160,100,120,30);
+		label3.setBounds(20, 140, 160, 30);	tcno.setBounds(160, 140, 120, 30);
+		label4.setBounds(20, 180, 160, 30);	addr.setBounds(160, 180, 120, 30);
+		label5.setBounds(20, 220, 160, 30);	salary.setBounds(160, 220, 120, 30);
+		label6.setBounds(20, 260, 160, 30);	gender.setBounds(160, 260, 120, 30);
+		label7.setBounds(20, 300, 160, 30);	bdate.setBounds(160, 300, 120, 30);
+		label8.setBounds(20, 340, 160, 30);	deptNo.setBounds(160, 340, 120, 30);
+		label9.setBounds(20, 380, 160, 30);	shift1.setBounds(160, 380, 120, 30);
+		label10.setBounds(20, 420, 160, 30); dayof.setBounds(160, 420, 120, 30);
+		save.setBounds(160, 460, 120, 30);
 
 
 
@@ -372,16 +396,17 @@ public class GeneralManager extends JFrame implements ActionListener {
 
 		Connection();
 
-		GridLayout layout = new GridLayout(16,16);
+		//GridLayout layout = new GridLayout(16,16);
 		frame3 = new JFrame("Assign New Manager");
 		//frame4.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame3.setSize(500,500);
-		frame3.setLayout(layout);
+		frame3.setLayout(null);
 
 
 		JTextField deptID = new JTextField();
 		JTextField manID = new JTextField();
 		JTextArea oldID = new JTextArea();
+		oldID.setEditable(false);
 
 
 		JButton  discharge = new JButton("Discharge");
@@ -390,9 +415,19 @@ public class GeneralManager extends JFrame implements ActionListener {
 		JLabel label1 = new JLabel("Deptartment ID :");
 		JLabel label2 = new JLabel("New manager ID :");
 		JLabel label3 = new JLabel("Old manager ID :");
+		
+		
+		label1.setBounds(20, 60, 120, 30); deptID.setBounds(200, 60, 120, 30);
+		discharge.setBounds(200, 100, 120, 30);
+		label3.setBounds(20,160,120,30); oldID.setBounds(200, 160, 120, 30);
+		label2.setBounds(20, 220, 120, 30); manID.setBounds(200, 220, 120, 30);
+		assign.setBounds(200, 260, 120, 30);
+		
 
 		frame3.add(label1);
 		frame3.add(deptID);
+		frame3.add(label3);
+		frame3.add(oldID);
 
 		frame3.add(discharge);
 
@@ -402,13 +437,13 @@ public class GeneralManager extends JFrame implements ActionListener {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				frame3.add(label3);
+			
 
 
 				try {
 
 					oldID.setText(getOldID(Integer.parseInt(deptID.getText()))[0]+"");
-					frame3.add(oldID);
+					//frame3.add(oldID);
 
 					frame3.setVisible(true);
 
@@ -551,6 +586,14 @@ public class GeneralManager extends JFrame implements ActionListener {
 
 						if(JOptionPane.showConfirmDialog(null, "You are now discharging a manager.", "WARNING",JOptionPane.YES_NO_CANCEL_OPTION) == JOptionPane.YES_OPTION)
 						{
+							
+							Date simdikiZaman = new Date();
+							DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+
+							String zaman = df.format(simdikiZaman);
+							
+							addHistory(empName(id), empLname(id), empTC(id), id, empStart(id),zaman);
+							
 							Statement st =  (Statement) con.createStatement();
 							((java.sql.Statement) st).executeUpdate("Delete from employees where emp_id = "+id);
 
@@ -645,7 +688,13 @@ public class GeneralManager extends JFrame implements ActionListener {
 						//else// çalýþan manager deðilse
 						//{
 					
+						Date simdikiZaman = new Date();
+						DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
+						String zaman = df.format(simdikiZaman);
+						
+						addHistory(empName(id), empLname(id), empTC(id), id, empStart(id),zaman);
+						
 						Statement st =  (Statement) con.createStatement();
 						((java.sql.Statement) st).executeUpdate("Delete from employees where emp_id = "+id);
 
@@ -687,6 +736,74 @@ public class GeneralManager extends JFrame implements ActionListener {
 		}//man deðilse
 	}
 
+	public String empName(int id1) throws SQLException
+	{
+		
+		Connection();
+		
+		String name ="";
+		pst = con.prepareStatement("SELECT emp_fname FROM employees where emp_id ="+id1);
+		rs = pst.executeQuery();
+
+		while(rs.next())
+			name =  rs.getString("emp_fname");
+	
+		return name;
+		
+		
+	}
+	
+	public String empLname(int id1) throws SQLException
+	{
+		
+		Connection();
+		
+		String name ="";
+		pst = con.prepareStatement("SELECT emp_lname FROM employees where emp_id ="+id1);
+		rs = pst.executeQuery();
+
+		while(rs.next())
+			name =  rs.getString("emp_lname");
+	
+		return name;
+		
+		
+	}
+	
+	public String empStart(int id1) throws SQLException
+	{
+		
+		Connection();
+		
+		String name ="";
+		pst = con.prepareStatement("SELECT emp_start FROM employees where emp_id ="+id1);
+		rs = pst.executeQuery();
+
+		while(rs.next())
+			name =  rs.getString("emp_start");
+	
+		return name;
+		
+		
+	}
+	
+	public String empTC(int id1) throws SQLException
+	{
+		
+		Connection();
+		
+		String name ="";
+		pst = con.prepareStatement("SELECT emp_tc FROM employees where emp_id ="+id1);
+		rs = pst.executeQuery();
+
+		while(rs.next())
+			name =  rs.getString("emp_tc");
+	
+		return name;
+		
+		
+	}
+	
 
 	public void dismissEmployee()
 	{
@@ -694,11 +811,11 @@ public class GeneralManager extends JFrame implements ActionListener {
 
 		Connection();
 
-		GridLayout layout = new GridLayout(16,16);
+		//GridLayout layout = new GridLayout(16,16);
 		frame4 = new JFrame("Discharge Employee");
 		//frame4.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame4.setSize(500,500);
-		frame4.setLayout(layout);
+		frame4.setLayout(null);
 
 
 		JTextField empID = new JTextField();
@@ -710,10 +827,17 @@ public class GeneralManager extends JFrame implements ActionListener {
 
 		JLabel label1 = new JLabel("Employee ID :");
 		JLabel label2 = new JLabel("Compensation :");
+		
+		label1.setBounds(20,60,120,30);
+		empID.setBounds(120, 60, 120, 30);
+		discharge.setBounds(120, 100, 120, 30);
+		label2.setBounds(20,140,120,30);
+		tazminat.setBounds(120, 140, 120, 30);
 
 		frame4.add(label1);
 		frame4.add(empID);
-
+		frame4.add(label2);
+		frame4.add(tazminat);
 		frame4.add(discharge);
 
 
@@ -722,10 +846,6 @@ public class GeneralManager extends JFrame implements ActionListener {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				frame4.add(label2);
-				frame4.add(tazminat);
-
-
 				try {
 
 					int id = Integer.parseInt(empID.getText());
@@ -733,8 +853,6 @@ public class GeneralManager extends JFrame implements ActionListener {
 					tazminat.setText(calculateComp(id)+" TL");
 
 					dismissEmp(id);
-
-
 
 
 				} catch (NumberFormatException | SQLException e1) {
@@ -751,8 +869,392 @@ public class GeneralManager extends JFrame implements ActionListener {
 
 	}
 
+	public int cSal() throws SQLException
+	{
+		
+		Connection();
+
+		ArrayList<Integer> salaries = new ArrayList<>();
+		
+		int sal = 0;
+		pst = con.prepareStatement("SELECT salary FROM employees where dno =11");
+		rs = pst.executeQuery();
+
+		while(rs.next())
+			salaries.add( rs.getInt("salary"));
+		
+		for(int i = 0; i<salaries.size();i++)
+			sal = sal+salaries.get(i);
 
 
+		return sal;
+
+	}
+	
+	public int tSal() throws SQLException
+	{
+		
+		Connection();
+
+		int sal = 0;
+		ArrayList<Integer> salaries = new ArrayList<>();
+		pst = con.prepareStatement("SELECT salary FROM employees where dno =12");
+		rs = pst.executeQuery();
+
+		while(rs.next())
+			salaries.add( rs.getInt("salary"));
+
+		for(int i = 0; i<salaries.size();i++)
+			sal = sal+salaries.get(i);
+
+		return sal;
+
+	}
+	
+	public int eSal() throws SQLException
+	{
+		
+		Connection();
+
+		int sal = 0;
+		ArrayList<Integer> salaries = new ArrayList<>();
+		pst = con.prepareStatement("SELECT salary FROM employees where dno =13");
+		rs = pst.executeQuery();
+
+		while(rs.next())
+			salaries.add( rs.getInt("salary"));
+
+		for(int i = 0; i<salaries.size();i++)
+			sal = sal+salaries.get(i);
+
+		return sal;
+
+	}
+	
+	public int resSal() throws SQLException
+	{
+		
+		Connection();
+
+		int sal = 0;
+		ArrayList<Integer> salaries = new ArrayList<>();
+		pst = con.prepareStatement("SELECT salary FROM employees where dno =14");
+		rs = pst.executeQuery();
+
+		while(rs.next())
+			salaries.add( rs.getInt("salary"));
+
+		for(int i = 0; i<salaries.size();i++)
+			sal = sal+salaries.get(i);
+
+		return sal;
+
+	}
+	
+	public int hSal() throws SQLException
+	{
+		
+		Connection();
+
+		int sal = 0;
+		ArrayList<Integer> salaries = new ArrayList<>();
+		pst = con.prepareStatement("SELECT salary FROM employees where dno =15");
+		rs = pst.executeQuery();
+
+		while(rs.next())
+			salaries.add( rs.getInt("salary"));
+
+		for(int i = 0; i<salaries.size();i++)
+			sal = sal+salaries.get(i);
+
+		return sal;
+
+	}
+	
+	public int sSal() throws SQLException
+	{
+		
+		Connection();
+
+		int sal = 0;
+		ArrayList<Integer> salaries = new ArrayList<>();
+		pst = con.prepareStatement("SELECT salary FROM employees where dno =16");
+		rs = pst.executeQuery();
+
+		while(rs.next())
+			salaries.add( rs.getInt("salary"));
+
+		for(int i = 0; i<salaries.size();i++)
+			sal = sal+salaries.get(i);
+
+		return sal;
+
+	}
+	
+	public int respSal() throws SQLException
+	{
+		
+		Connection();
+
+		int sal = 0;
+		ArrayList<Integer> salaries = new ArrayList<>();
+		pst = con.prepareStatement("SELECT salary FROM employees where dno =17");
+		rs = pst.executeQuery();
+
+		while(rs.next())
+			salaries.add( rs.getInt("salary"));
+
+		for(int i = 0; i<salaries.size();i++)
+			sal = sal+salaries.get(i);
+
+		return sal;
+
+	}
+
+	public void expenses() throws SQLException
+	{
+		Connection();
+
+		frame5 = new JFrame("Expenses");
+		//frame4.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame5.setSize(500,500);
+		frame5.setLayout(null);
+		
+		JLabel cleaningSalary = new JLabel("Cleaning department total salary : "+cSal()+" TL");
+		JLabel transpSalary = new JLabel("Transportation department total salary : "+tSal()+" TL");
+		JLabel entSalary = new JLabel("Entertainment department total salary : "+eSal()+" TL");
+		JLabel restSalary = new JLabel("Restaurant department total salary : "+resSal()+" TL");
+		JLabel healthSalary = new JLabel("Health department total salary : "+hSal()+" TL");
+		JLabel secSalary = new JLabel("Security department total salary : "+sSal()+" TL");
+		JLabel respSalary = new JLabel("Reseption department total salary : "+respSal()+" TL");
+		
+		
+		cleaningSalary.setBounds(20, 60, 300, 30);
+		transpSalary.setBounds(20, 100, 300, 30);
+		entSalary.setBounds(20, 140, 300, 30);
+		restSalary.setBounds(20, 180, 300, 30);
+		healthSalary.setBounds(20, 220, 300, 30);
+		secSalary.setBounds(20, 260, 300, 30);
+		respSalary.setBounds(20, 300, 300, 30);
+		 
+		 
+		frame5.add(respSalary);
+		frame5.add(secSalary);
+		frame5.add(healthSalary);
+		frame5.add(restSalary);
+		frame5.add(entSalary);
+		frame5.add(transpSalary);
+		frame5.add(cleaningSalary);
+		
+		frame5.setVisible(true);
+
+	}
+	
+	public String getName(int id1) throws SQLException
+	{
+		Connection();
+		
+		String name ="";
+		pst = con.prepareStatement("SELECT fname FROM emp_history where emp_id ="+id1);
+		rs = pst.executeQuery();
+
+		while(rs.next())
+			name =  rs.getString("fname");
+	
+		System.out.println("isim :"+name);
+		return name;
+		
+	}
+	
+	public String getLastName(int id1) throws SQLException
+	{
+		Connection();
+		
+		String name ="";
+		pst = con.prepareStatement("SELECT lname FROM emp_history where emp_id ="+id1);
+		rs = pst.executeQuery();
+
+		while(rs.next())
+			name =  rs.getString("lname");
+	
+		return name;
+		
+	}
+	
+	public String getSdate(int id1) throws SQLException
+	{
+		Connection();
+		
+		String name ="";
+		pst = con.prepareStatement("SELECT start_date FROM emp_history where emp_id ="+id1);
+		rs = pst.executeQuery();
+
+		while(rs.next())
+			name =  rs.getString("start_date");
+	
+		return name;
+		
+	}
+	
+	public String getFdate(int id1) throws SQLException
+	{
+		Connection();
+		
+		String name ="";
+		pst = con.prepareStatement("SELECT finidh_date FROM emp_history where emp_id ="+id1);
+		rs = pst.executeQuery();
+
+		while(rs.next())
+			name =  rs.getString("finidh_date");
+	
+		return name;
+		
+	}
+	
+	public String getTC(int id1) throws SQLException
+	{
+		Connection();
+		
+		String name ="";
+		pst = con.prepareStatement("SELECT tc FROM emp_history where emp_id ="+id1);
+		rs = pst.executeQuery();
+
+		while(rs.next())
+			name =  rs.getString("tc");
+	
+		return name;
+		
+	}
+	
+
+	//seçilen eski elemanýn bilgileri görünür;
+	
+	public void record(int id1) throws SQLException
+	{
+		Connection();
+
+		frame6 = new JFrame("Employee Record");
+		//frame6.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame6.setSize(500,500);
+		frame6.setLayout(null);
+		
+		
+		JLabel fname = new JLabel("Name :");
+		JLabel lname = new JLabel("Last Name :");
+		JLabel tcNo = new JLabel("TC :");
+		JLabel id = new JLabel("ID :");
+		JLabel sdate = new JLabel("Start Date :");
+		JLabel fdate = new JLabel("Last Date :");
+		
+		
+		JTextArea f_name = new JTextArea();
+		JTextArea l_name = new JTextArea();
+		JTextArea tc = new JTextArea();
+		JTextArea ID = new JTextArea();
+		JTextArea startD = new JTextArea();
+		JTextArea finishD = new JTextArea();
+		
+		
+		fname.setBounds(20, 60, 160, 30); f_name.setBounds(100, 60, 160, 30);
+		lname.setBounds(20, 100, 160, 30); l_name.setBounds(100, 100, 160, 30);
+		tcNo.setBounds(20, 140, 160, 30); tc.setBounds(100, 140, 160, 30);
+		id.setBounds(20, 180, 160, 30); ID.setBounds(100, 180, 160, 30);
+		sdate.setBounds(20, 220, 160, 30); startD.setBounds(100, 220, 160, 30);
+		fdate.setBounds(20, 260, 160, 30); finishD.setBounds(100, 260, 160, 30);
+		
+		f_name.setText(getName(id1));
+		l_name.setText(getLastName(id1));
+		startD.setText(getSdate(id1));
+		finishD.setText(getFdate(id1));
+		tc.setText(getTC(id1));
+		ID.setText(id1+"");
+		
+		
+		
+		
+		frame6.add(finishD);
+		frame6.add(startD);
+		frame6.add(ID);
+		frame6.add(tc);
+		frame6.add(l_name);
+		frame6.add(f_name);
+		frame6.add(fdate);
+		frame6.add(sdate);
+		frame6.add(id);
+		frame6.add(tcNo);
+		frame6.add(lname);
+		frame6.add(fname);
+		
+		frame6.setVisible(true);
+
+		
+	}
+	
+	
+	//eski çalýþanlarýn id'sini döner;
+	
+	public String[] oldRecords() throws SQLException
+	{
+		Connection();
+		
+		ArrayList<Integer> id = new ArrayList<>();
+		pst = con.prepareStatement("SELECT emp_id FROM emp_history");
+		rs = pst.executeQuery();
+		
+		while(rs.next())
+			id.add(rs.getInt("emp_id"));
+		
+		String[] rec = new String[id.size()];
+		
+		for(int i =0;i<id.size();i++)
+			rec[i] = id.get(i)+"";
+		
+		
+		System.out.println(rec[0]);
+		return rec;
+
+		
+	}
+	
+	public void sRecords() throws SQLException
+	{
+		frame7 = new JFrame("Records");
+		//frame6.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame7.setSize(500,500);
+		frame7.setLayout(null);
+		
+		JComboBox<String> ids = new JComboBox<>(oldRecords());
+		JLabel label1 = new JLabel("ID's : ");
+		
+		label1.setBounds(20,60,120,30);
+		ids.setBounds(100, 60, 160, 30);
+		
+		frame7.add(label1);
+		frame7.add(ids);
+		
+		
+		ids.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				 int selectedID = Integer.parseInt((String) ids.getSelectedItem());
+				 
+				 try {
+					record(selectedID);
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+			}
+		});
+		
+		frame7.setVisible(true);
+		
+		
+		
+		
+	}
 
 
 
@@ -763,21 +1265,29 @@ public class GeneralManager extends JFrame implements ActionListener {
 		managerAtama = new JButton("Yönetici Ata");
 		expenses = new JButton("Expenses");
 		dismiss = new JButton("Eleman Çýkar");
+		showRecord = new JButton("Eleman kayýtlarýný göster ");
 
 
-		GridLayout layout = new GridLayout(4,2);
+		/*GridLayout layout = new GridLayout(4,2);
 		layout.setHgap(60);
-		layout.setVgap(60);
+		layout.setVgap(60);*/
 		frame = new JFrame("General Manager");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		frame.setSize(500,500);
-		frame.setLayout(layout);
+		frame.setLayout(null);
+		
+		elemanEkle.setBounds(20, 60, 160, 30);
+		dismiss.setBounds(20, 100, 160, 30);
+		managerAtama.setBounds(20, 140, 160, 30);
+		expenses.setBounds(20, 180, 160, 30);
+		showRecord.setBounds(20, 220, 220, 30);
 
 		frame.add(elemanEkle);
 		frame.add(expenses);
 		frame.add(managerAtama);
 		frame.add(dismiss);
+		frame.add(showRecord);
 
 
 		elemanEkle.addActionListener(new ActionListener() {
@@ -829,10 +1339,38 @@ public class GeneralManager extends JFrame implements ActionListener {
 			}
 		});
 
+		
+		expenses.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+					try {
+						expenses();
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+			}
+		});
+		
+		showRecord.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+			
+					try {
+						sRecords();
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				
+			}
+		});
 
 		frame.setVisible(true);
-
-
+	
 
 	}//showGui
 

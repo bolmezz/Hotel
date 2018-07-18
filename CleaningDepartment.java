@@ -28,6 +28,7 @@ public class CleaningDepartment extends JFrame implements ActionListener {
 	private JButton kirliodalar;
 	private JButton vardiyadegistir;
 	private JButton expenses;
+	private JButton izinGunu;
 	private JFrame frame;
 	private JFrame frame2;
 	private JFrame frame3;
@@ -232,16 +233,13 @@ public class CleaningDepartment extends JFrame implements ActionListener {
 
 		Connection();
 
-		//int[] rooms =new int[30];
-		
+
 		ArrayList<Integer> rooms = new ArrayList<>();
 		pst = con.prepareStatement("SELECT room_no FROM rooms where cleanliness = 0 Order BY room_no ASC");
 		rs = pst.executeQuery();
 
-		int count =-1;
 		while (rs.next()) {
 
-			count ++;
 			rooms.add(rs.getInt("room_no"));
 
 
@@ -251,7 +249,7 @@ public class CleaningDepartment extends JFrame implements ActionListener {
 	
 	
 	
-	//odanýn cleanliness durumunu 0 yapar. (yani oda artýk temiz göürünür);
+	//odanýn cleanliness durumunu 1 yapar. (yani oda artýk temiz göürünür);
 	
 	public void cleanRoom(int roomID) throws SQLException
 	{
@@ -296,6 +294,39 @@ public class CleaningDepartment extends JFrame implements ActionListener {
 
 
 		
+	}
+	
+	//odadaki stok sayýsýný 1 azaltýr;
+	
+	public void removeStock(int roomID, int towelA, int soapA, int waterA, int shampooA) throws SQLException
+	{
+		
+		Connection();
+
+		int roomNo =0;
+		
+		roomNo =dirtyRooms().get(roomID);
+
+		if(towelA != 1 && soapA != 1 && waterA !=1 && shampooA != 1)
+		{
+		
+		Statement st =  (Statement) con.createStatement();
+		((java.sql.Statement) st).executeUpdate("UPDATE rooms SET towel_room="+(towelA-1)+",water_room ="+(waterA-1)+",soap_room ="+(soapA-1)+
+				",shampoo_room ="+(shampooA-1)+" Where room_no ="+roomNo);
+		
+		
+		}
+		
+		
+		else
+		{
+			
+			JOptionPane.showMessageDialog(frame5, "Stocks can not remove !");
+
+
+			frame5.dispose();
+			
+		}
 	}
 
 	
@@ -384,9 +415,11 @@ public class CleaningDepartment extends JFrame implements ActionListener {
 		
 		JButton ekle = new JButton("Ekle");
 		JButton kaydet = new JButton("Temizliði Bitir");
+		JButton cikar = new JButton("Geri al");
 		
 		ekle.setBounds(110, 240, 120, 30);
-		kaydet.setBounds(110, 280, 120, 30);
+		kaydet.setBounds(110, 320, 120, 30);
+		cikar.setBounds(110,280,120,30);
 		
 		frame5.add(toweltext);
 		frame5.add(towelT);
@@ -405,6 +438,7 @@ public class CleaningDepartment extends JFrame implements ActionListener {
 		
 		frame5.add(ekle);
 		frame5.add(kaydet);
+		frame5.add(cikar);
 		
 		frame5.setVisible(true);
 		ekle.addActionListener(new ActionListener() {
@@ -432,6 +466,33 @@ public class CleaningDepartment extends JFrame implements ActionListener {
 				}
 				
 	
+				
+			}
+		});
+		
+		
+		cikar.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				try {
+					
+					removeStock(roomID,towel,soap,water,shampoo);
+					
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				frame5.dispose();
+				
+				try {
+					roomDetail(roomID);
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				
 			}
 		});
@@ -466,11 +527,11 @@ public class CleaningDepartment extends JFrame implements ActionListener {
 	{
 
 
-		GridLayout layout = new GridLayout(6,6);
+		//GridLayout layout = new GridLayout(6,6);
 		frame2 = new JFrame("Dirty Rooms");
 		//frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame2.setSize(500,500);
-		frame2.setLayout(layout);
+		frame2.setLayout(null);
 
 
 
@@ -497,7 +558,10 @@ public class CleaningDepartment extends JFrame implements ActionListener {
 		}
 
 		JComboBox cmbRooms = new JComboBox(room2);
-		JLabel lblText = new JLabel();
+		JLabel lblText = new JLabel("Oda No :");
+	
+		cmbRooms.setBounds(100,60,100,30);
+		lblText.setBounds(20,60,100,30);
 		
 	
 		cmbRooms.setSelectedIndex(0);
@@ -708,11 +772,11 @@ public class CleaningDepartment extends JFrame implements ActionListener {
 	public JFrame expenses() throws SQLException
 	{
 
-		GridLayout layout = new GridLayout(6,8);
+		//GridLayout layout = new GridLayout(6,8);
 		frame3 = new JFrame("Expenses");
 		//frame3.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame3.setSize(500,500);
-		frame3.setLayout(layout);
+		frame3.setLayout(null);
 
 		String det_expenses = "Detergent expenses : "+det_amount()[0]*det_price()[0]+"";
 		String shamp_expenses = "Shampoo expenses : "+shamp_amount()[0]*shamp_price()[0]+"";
@@ -735,7 +799,12 @@ public class CleaningDepartment extends JFrame implements ActionListener {
 		JLabel label5 = new JLabel(gloves_expenses);
 		JLabel label6 = new JLabel(total_expenses);
 
-		//System.out.println(det_expenses);
+		label1.setBounds(20, 60, 200, 30);
+		label2.setBounds(20, 80, 200, 30);
+		label3.setBounds(20, 100, 200, 30);
+		label4.setBounds(20, 120, 200, 30);
+		label5.setBounds(20, 140, 200, 30);
+		label6.setBounds(20, 160, 200, 30);
 
 
 		frame3.add(label1);
@@ -749,36 +818,143 @@ public class CleaningDepartment extends JFrame implements ActionListener {
 
 		return frame3;
 	}
+	
+	public void izinGunuDegistir() {
+		JFrame vardiya = new JFrame("Shift Changer");
+		vardiya.setSize(500,500);
+		vardiya.setLayout(null);
+		
+		JButton change = new JButton("Change Day-Off");
+		JLabel empIDLab = new JLabel("Employee ID:");
+		JTextField empID = new JTextField();
+		JLabel newDayLab = new JLabel("Select day to change:");
+		JComboBox<String> newDay = new JComboBox<String>();
+		newDay.addItem("Monday");
+		newDay.addItem("Tuesday");
+		newDay.addItem("Wednesday");
+		newDay.addItem("Thursday");
+		newDay.addItem("Friday");
+		newDay.addItem("Saturday");
+		newDay.addItem("Sunday");
+		newDay.setSelectedIndex(0);
+		
+		empIDLab.setBounds(20, 60, 100, 30);
+		empID.setBounds(130, 60, 100, 30);
+		newDayLab.setBounds(20, 100, 100, 30);
+		newDay.setBounds(130, 100, 100, 30);
+		change.setBounds(20, 150, 160, 30);
+		vardiya.add(empIDLab);
+		vardiya.add(empID);
+		vardiya.add(newDayLab);
+		vardiya.add(newDay);
+		vardiya.add(change);
+		vardiya.setVisible(true);
+		change.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent event)
+			{
+				try {
+					String selectedDayOff = (String) newDay.getSelectedItem();
+					setIzinGunu(empID.getText(),selectedDayOff);
+					vardiya.setVisible(false);
+
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+	
+	public void setIzinGunu(String id, String dayOff) throws SQLException {
+		Connection();
+		
+		int update=0;
+		String a = "UPDATE employees SET day_offs = '" + dayOff + "' WHERE emp_id = " + id;
+		pst = con.prepareStatement(a);
+		update = pst.executeUpdate();
+	}
+	
+	public void vardiyaDegistir() {
+		JFrame vardiya = new JFrame("Vardiya Degistirme");
+		vardiya.setSize(500,500);
+		vardiya.setLayout(null);
+		
+		JButton change = new JButton("Change Shift");
+		JLabel empIDLab = new JLabel("Employee ID:");
+		JTextField empID = new JTextField();
+		JLabel newShiftLab = new JLabel("Select shift to change:");
+		JComboBox<String> newShift = new JComboBox<String>();
+		newShift.addItem("Morning");
+		newShift.addItem("Evening");
+		newShift.addItem("Night");
+		newShift.setSelectedIndex(0);
+		
+		empIDLab.setBounds(20, 60, 100, 30);
+		empID.setBounds(130, 60, 100, 30);
+		newShiftLab.setBounds(20, 100, 100, 30);
+		newShift.setBounds(130, 100, 100, 30);
+		change.setBounds(20, 150, 160, 30);
+		vardiya.add(empIDLab);
+		vardiya.add(empID);
+		vardiya.add(newShiftLab);
+		vardiya.add(newShift);
+		vardiya.add(change);
+		vardiya.setVisible(true);
+		change.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent event)
+			{
+				try {
+					int selectedVardiya = newShift.getSelectedIndex();
+					setVardiya(empID.getText(),selectedVardiya);
+					vardiya.setVisible(false);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+	
+	public void setVardiya(String id, int shift) throws SQLException {
+		Connection();
+		
+		int update=0;
+		String a = "UPDATE employees SET shift = " + shift + " WHERE emp_id = " + id;
+		pst = con.prepareStatement(a);
+		update = pst.executeUpdate();
+	}
+
 
 
 	public void showGUI1(boolean isMgr) throws SQLException {
 
+		
+		
 		kirliodalar = new JButton("Kirli Odalar");
 		vardiyadegistir = new JButton("Vardiya Degistir");
 		expenses = new JButton("Expenses");
+		izinGunu = new JButton("Set Day Off");
 
-
-		GridLayout layout = new GridLayout(4,2);
-		layout.setHgap(60);
-		layout.setVgap(60);
 		frame = new JFrame("Cleaning Departmant");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+	
 
 		frame.setSize(500,500);
-		frame.setLayout(layout);
-
-
-
-
-
+		frame.setLayout(null);
 
 		if(isMgr)
 		{
-			frame.setVisible(true);
+			
+			vardiyadegistir.setBounds(20, 60, 160, 30);
+			izinGunu.setBounds(20, 100, 160, 30);
+			expenses.setBounds(20, 140, 160, 30);
+			kirliodalar.setBounds(20, 180, 160, 30);
+			
 			frame.add(vardiyadegistir);
 			frame.add(expenses);
 			frame.add(kirliodalar);
-
+			frame.add(izinGunu);
+			frame.setVisible(true);
 
 
 			kirliodalar.addActionListener(new ActionListener() {
@@ -813,13 +989,28 @@ public class CleaningDepartment extends JFrame implements ActionListener {
 
 				}				
 			});
+			
+			
+			izinGunu.addActionListener(new ActionListener(){
+				public void actionPerformed(ActionEvent event)
+				{
+					izinGunuDegistir();
+				}
+			});
 
-
+			vardiyadegistir.addActionListener(new ActionListener(){
+				public void actionPerformed(ActionEvent event)
+				{
+					vardiyaDegistir();
+				}
+			});
+			
 
 		}//if(isMng)
 
 		else {
 
+			kirliodalar.setBounds(20, 60, 160, 30);
 
 			frame.add(kirliodalar);
 			frame.setVisible(true);
@@ -846,6 +1037,8 @@ public class CleaningDepartment extends JFrame implements ActionListener {
 
 
 		}//else
+		
+		
 	}
 
 	@Override
