@@ -272,7 +272,6 @@ public class ReceptionDepartment {
 			msg_amount[0] = rs.getInt("room_no");
 			roomNo.addItem(msg_amount[0]+"");
 		}
-		roomNo.setSelectedIndex(0);
 		
 		breakfast.addActionListener(new ActionListener()
 		{
@@ -394,7 +393,7 @@ public class ReceptionDepartment {
 	
 	public void onCheckOutClicked() throws SQLException {
 		JFrame expenses = new JFrame("Reception Department Expenses");
-		expenses.setSize(700,700);
+		expenses.setSize(300,300);
 		expenses.setLayout(null);
 		
 		JLabel odaLab = new JLabel("Choose Room");
@@ -417,14 +416,14 @@ public class ReceptionDepartment {
 		
 		JLabel puanLab = new JLabel("Room Point");
 		JTextField puan = new JTextField();
-		puanLab.setBounds(20,50,100,30);
-		puan.setBounds(140,50,100,30);
+		puanLab.setBounds(20,60,100,30);
+		puan.setBounds(140,60,100,30);
 		
 		expenses.add(puanLab);
 		expenses.add(puan);
 		
 		JButton remove = new JButton("Remove Guests");
-		remove.setBounds(80,155,100,30);
+		remove.setBounds(60,140,150,30);
 		expenses.add(rooms);
 		expenses.add(odaLab);
 		expenses.add(remove);
@@ -488,7 +487,21 @@ public class ReceptionDepartment {
 					pst = con.prepareStatement(a);
 					update = pst.executeUpdate();
 					
-
+					a = "UPDATE rooms SET towel_room = 0 WHERE room_no = " + room;
+					pst = con.prepareStatement(a);
+					update = pst.executeUpdate();
+					
+					a = "UPDATE rooms SET soap_room = 0 WHERE room_no = " + room;
+					pst = con.prepareStatement(a);
+					update = pst.executeUpdate();
+					
+					a = "UPDATE rooms SET shampoo_room = 0 WHERE room_no = " + room;
+					pst = con.prepareStatement(a);
+					update = pst.executeUpdate();
+					
+					a = "UPDATE rooms SET water_room = 0 WHERE room_no = " + room;
+					pst = con.prepareStatement(a);
+					update = pst.executeUpdate();
 					
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
@@ -663,6 +676,12 @@ public class ReceptionDepartment {
 		    long diff = date2.getTime() - date1.getTime();
 		    
 		    kalinanGun = (int) TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+		    if(kalinanGun == 0) {
+		    	kalinanGun = 1;
+		    }
+		    else {
+		    	kalinanGun = kalinanGun;
+		    }
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -970,7 +989,7 @@ public class ReceptionDepartment {
 		
 		JComboBox<String> freeRooms = new JComboBox<String>();
 		int[] msg_amount = new int[1];
-		pst = con.prepareStatement("SELECT room_no FROM rooms ORDER BY room_no ASC");
+		pst = con.prepareStatement("SELECT room_no FROM rooms WHERE isempty = 1 ORDER BY room_no ASC");
 		rs = pst.executeQuery();
 		
 		while(rs.next()) {
@@ -1073,6 +1092,7 @@ public class ReceptionDepartment {
 				}
 
 				JOptionPane.showMessageDialog(checkIn, "Guests are added to the database !");
+				
 			}			
 		});
 
