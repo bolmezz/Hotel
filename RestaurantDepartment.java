@@ -623,7 +623,7 @@ public class RestaurantDepartment {
 
 
 	public void izinGunuDegistir() {
-		JFrame vardiya = new JFrame("Shift Changer");
+		JFrame vardiya = new JFrame("Ýzin Günü Deðiþtirme");
 		vardiya.setSize(500,500);
 		vardiya.setLayout(null);
 
@@ -672,9 +672,30 @@ public class RestaurantDepartment {
 		Connection();
 
 		int update=0;
-		String a = "UPDATE employees SET day_offs = '" + dayOff + "' WHERE emp_id = " + id;
-		pst = con.prepareStatement(a);
-		update = pst.executeUpdate();
+
+		if(!id.contains("1") && !id.contains("2") && !id.contains("3") && !id.contains("4") && !id.contains("5") 
+				&& !id.contains("6") && !id.contains("7") && !id.contains("8") && !id.contains("9") && !id.contains("0") 
+				|| id.contains("+") || id.contains("-") || id.contains("*") || id.contains("/"))
+		{
+
+
+			JOptionPane.showMessageDialog(null, "Geçerli ID girin !");
+
+		}
+		else {
+
+			if(Integer.parseInt(id)<17008 && Integer.parseInt(id)>11000) {
+
+				String a = "UPDATE employees SET day_offs = '" + dayOff + "' WHERE emp_id = " + id;
+				pst = con.prepareStatement(a);
+				update = pst.executeUpdate();
+				
+				JOptionPane.showMessageDialog(null, "Day-off has been changed !");
+			}
+			else
+				JOptionPane.showMessageDialog(null, "Geçerli ID girin !");
+
+		}
 	}
 	public void vardiyaDegistir() {
 		JFrame vardiya = new JFrame("Vardiya Degistirme");
@@ -721,9 +742,27 @@ public class RestaurantDepartment {
 		Connection();
 
 		int update=0;
-		String a = "UPDATE employees SET shift = " + shift + " WHERE emp_id = " + id;
-		pst = con.prepareStatement(a);
-		update = pst.executeUpdate();
+
+		if(!id.contains("1") && !id.contains("2") && !id.contains("3") && !id.contains("4") && !id.contains("5") 
+				&& !id.contains("6") && !id.contains("7") && !id.contains("8") && !id.contains("9") && !id.contains("0") 
+				|| id.contains("+") || id.contains("-") || id.contains("*") || id.contains("/"))
+		{
+
+
+			JOptionPane.showMessageDialog(null, "Geçerli ID girin !");
+
+		}
+		else {
+
+			if(Integer.parseInt(id)<17008 && Integer.parseInt(id)>11000) {
+				String a = "UPDATE employees SET shift = " + shift + " WHERE emp_id = " + id;
+				pst = con.prepareStatement(a);
+				update = pst.executeUpdate();
+				JOptionPane.showMessageDialog(null, "Shift has been changed !");
+			}
+			else
+				JOptionPane.showMessageDialog(null, "Geçerli ID girin !");
+		}
 	}
 
 	

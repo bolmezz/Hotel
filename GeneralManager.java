@@ -479,6 +479,17 @@ public class GeneralManager extends JFrame implements ActionListener {
 					String newID = manID.getText();
 					String old = oldID.getText();
 
+					if(!newID.contains("1") && !newID.contains("2") && !newID.contains("3") && !newID.contains("4") && !newID.contains("5") 
+							&& !newID.contains("6") && !newID.contains("7") && !newID.contains("8") && !newID.contains("9") && !newID.contains("0"))
+					{
+						
+						JOptionPane.showMessageDialog(frame3, "Geçerli ID girin !");
+						
+						frame3.setVisible(false);
+						assignManager();
+						
+					}
+					
 					setManager(Integer.parseInt(newID), Integer.parseInt(old),Integer.parseInt(deptID.getText()));
 
 
@@ -846,14 +857,26 @@ public class GeneralManager extends JFrame implements ActionListener {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
+				String kontrol = empID.getText();
+				
 				try {
 
-					int id = Integer.parseInt(empID.getText());
+					
+					if(!kontrol.contains("1") && !kontrol.contains("2") && !kontrol.contains("3") && !kontrol.contains("4") && !kontrol.contains("5") 
+							&& !kontrol.contains("6") && !kontrol.contains("7") && !kontrol.contains("8") && !kontrol.contains("9") && !kontrol.contains("0"))
+					{
+						
+						JOptionPane.showMessageDialog(frame4, "Geçerli ID girin !");
+						frame4.setVisible(false);
+						dismissEmployee();
+					}
+					
+					int id = Integer.parseInt(kontrol);
 
 					tazminat.setText(calculateComp(id)+" TL");
 
 					dismissEmp(id);
-
+				
 
 				} catch (NumberFormatException | SQLException e1) {
 
@@ -1272,7 +1295,7 @@ public class GeneralManager extends JFrame implements ActionListener {
 		layout.setHgap(60);
 		layout.setVgap(60);*/
 		frame = new JFrame("General Manager");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		frame.setSize(500,500);
 		frame.setLayout(null);

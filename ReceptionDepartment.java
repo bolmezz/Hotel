@@ -78,9 +78,9 @@ public class ReceptionDepartment {
 		save = new JButton("Save");
 		add_in = new JButton("Add-in");
 
-		GridLayout layout = new GridLayout(6,6);
+		/*GridLayout layout = new GridLayout(6,6);
 		layout.setHgap(60);
-		layout.setVgap(60);
+		layout.setVgap(60);*/
 		frame = new JFrame("Reception Departmant");
 		checkIn.setSize(900,700);
 		checkIn.setLayout(null);
@@ -88,7 +88,17 @@ public class ReceptionDepartment {
 		
 		
 		frame.setSize(500,500);
-		frame.setLayout(layout);
+		frame.setLayout(null);
+		
+		
+		
+		izinGunu.setBounds(20, 60, 160, 30);
+		vardiyadegistir.setBounds(20, 100, 160, 30);
+		expenses.setBounds(20, 140, 160, 30);
+		
+		check_in.setBounds(20, 60, 120, 30);
+		check_out.setBounds(20, 100, 120, 30);
+		add_in.setBounds(20, 140, 120, 30);
 
 		if(isMgr)
 		{
@@ -462,6 +472,7 @@ public class ReceptionDepartment {
 					a = "DELETE FROM guest WHERE g_room_no = " + room;
 					pst = con.prepareStatement(a);
 					update = pst.executeUpdate();
+
 					
 					a = "UPDATE rooms SET score = " + puan.getText() + " WHERE room_no = " + room;
 					pst = con.prepareStatement(a);
@@ -502,6 +513,8 @@ public class ReceptionDepartment {
 					a = "UPDATE rooms SET water_room = 0 WHERE room_no = " + room;
 					pst = con.prepareStatement(a);
 					update = pst.executeUpdate();
+
+					expenses.dispose();
 					
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
@@ -890,6 +903,7 @@ public class ReceptionDepartment {
 		title.setBounds(120, 180, 150, 30);
 		save.setBounds(400, 250, 100, 30);
 		
+		
 		checkIn.add(tcNo);
 		checkIn.add(tcNoLab);
 		checkIn.add(mus_No);
@@ -989,7 +1003,7 @@ public class ReceptionDepartment {
 		
 		JComboBox<String> freeRooms = new JComboBox<String>();
 		int[] msg_amount = new int[1];
-		pst = con.prepareStatement("SELECT room_no FROM rooms WHERE isempty = 1 ORDER BY room_no ASC");
+		pst = con.prepareStatement("SELECT room_no FROM rooms WHERE isempty = 1 and cleanliness=1 ORDER BY room_no ASC");
 		rs = pst.executeQuery();
 		
 		while(rs.next()) {
@@ -1093,13 +1107,16 @@ public class ReceptionDepartment {
 
 				JOptionPane.showMessageDialog(checkIn, "Guests are added to the database !");
 				
+			
+				
 			}			
 		});
 
+	
 	}
 	
 	public void izinGunuDegistir() {
-		JFrame vardiya = new JFrame("Shift Changer");
+		JFrame vardiya = new JFrame("Ýzin Günü Dedðiþtirme");
 		vardiya.setSize(500,500);
 		vardiya.setLayout(null);
 		
@@ -1134,7 +1151,7 @@ public class ReceptionDepartment {
 				try {
 					String selectedDayOff = (String) newDay.getSelectedItem();
 					setIzinGunu(empID.getText(),selectedDayOff);
-					JOptionPane.showMessageDialog(vardiya, "Day-off has been changed !");
+					
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -1145,11 +1162,32 @@ public class ReceptionDepartment {
 	
 	public void setIzinGunu(String id, String dayOff) throws SQLException {
 		Connection();
-		
+
 		int update=0;
-		String a = "UPDATE employees SET day_offs = '" + dayOff + "' WHERE emp_id = " + id;
-		pst = con.prepareStatement(a);
-		update = pst.executeUpdate();
+
+		if(!id.contains("1") && !id.contains("2") && !id.contains("3") && !id.contains("4") && !id.contains("5") 
+				&& !id.contains("6") && !id.contains("7") && !id.contains("8") && !id.contains("9") && !id.contains("0") 
+				|| id.contains("+") || id.contains("-") || id.contains("*") || id.contains("/"))
+		{
+
+
+			JOptionPane.showMessageDialog(null, "Geçerli ID girin !");
+
+		}
+		else {
+
+			if(Integer.parseInt(id)<17008 && Integer.parseInt(id)>11000) {
+
+				String a = "UPDATE employees SET day_offs = '" + dayOff + "' WHERE emp_id = " + id;
+				pst = con.prepareStatement(a);
+				update = pst.executeUpdate();
+				
+				JOptionPane.showMessageDialog(null, "Day-off has been changed !");
+			}
+			else
+				JOptionPane.showMessageDialog(null, "Geçerli ID girin !");
+
+		}
 	}
 	public void vardiyaDegistir() {
 		JFrame vardiya = new JFrame("Vardiya Degistirme");
@@ -1183,7 +1221,7 @@ public class ReceptionDepartment {
 				try {
 					int selectedVardiya = newShift.getSelectedIndex();
 					setVardiya(empID.getText(),selectedVardiya);
-					JOptionPane.showMessageDialog(vardiya, "Shift has been changed !");
+					//JOptionPane.showMessageDialog(vardiya, "Shift has been changed !");
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -1196,12 +1234,29 @@ public class ReceptionDepartment {
 	
 	public void setVardiya(String id, int shift) throws SQLException {
 		Connection();
-		
+
 		int update=0;
-		String a = "UPDATE employees SET shift = " + shift + " WHERE emp_id = " + id;
-		pst = con.prepareStatement(a);
-		update = pst.executeUpdate();
-		
+
+		if(!id.contains("1") && !id.contains("2") && !id.contains("3") && !id.contains("4") && !id.contains("5") 
+				&& !id.contains("6") && !id.contains("7") && !id.contains("8") && !id.contains("9") && !id.contains("0") 
+				|| id.contains("+") || id.contains("-") || id.contains("*") || id.contains("/"))
+		{
+
+
+			JOptionPane.showMessageDialog(null, "Geçerli ID girin !");
+
+		}
+		else {
+
+			if(Integer.parseInt(id)<17008 && Integer.parseInt(id)>11000) {
+				String a = "UPDATE employees SET shift = " + shift + " WHERE emp_id = " + id;
+				pst = con.prepareStatement(a);
+				update = pst.executeUpdate();
+				JOptionPane.showMessageDialog(null, "Shift has been changed !");
+			}
+			else
+				JOptionPane.showMessageDialog(null, "Geçerli ID girin !");
+		}
 
 	}
 	

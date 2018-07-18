@@ -50,7 +50,7 @@ public class Giris {
 
 			con = DriverManager.getConnection(
 					"jdbc:postgresql://localhost/Hotel", "postgres",
-					"123412");
+					"08040094");
 
 
 		} catch (SQLException e) {
@@ -165,7 +165,7 @@ public class Giris {
 		f.add(value); f.add(l2); f.add(b);  
 		f.setSize(300,300);    
 		f.setLayout(null);   
-		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 
 		JFrame giris = new JFrame("Giriþ");
@@ -197,12 +197,14 @@ public class Giris {
 				
 				String kontrol = id.getText();
 				if(!kontrol.contains("1") && !kontrol.contains("2") && !kontrol.contains("3") && !kontrol.contains("4") && !kontrol.contains("5") 
-						&& !kontrol.contains("6") && !kontrol.contains("7") && !kontrol.contains("8") && !kontrol.contains("9") && !kontrol.contains("0"))
+						&& !kontrol.contains("6") && !kontrol.contains("7") && !kontrol.contains("8") && !kontrol.contains("9") && !kontrol.contains("0") 
+						|| kontrol.contains("+") || kontrol.contains("-") || kontrol.contains("*") || kontrol.contains("/"))
 				{
 					JOptionPane.showMessageDialog(giris, "Geçerli ID girin !");
 	
 					try {
 						giris.dispose();
+						giris.setVisible(false);
 						metod(cd, rd, resd, sd, td, ed, hd, gm);
 					} catch (HeadlessException | SQLException e1) {
 						// TODO Auto-generated catch block
@@ -251,6 +253,9 @@ public class Giris {
 											try {
 
 												gm.showGui10();
+												f.dispose();
+												value.setText("");
+												f.setVisible(false);
 
 											} catch (SQLException e1) {
 
@@ -263,6 +268,8 @@ public class Giris {
 											try {
 
 												f.dispose();
+												f.setVisible(false);
+												giris.setVisible(false);
 												metod(cd, rd, resd, sd, td, ed, hd, gm);
 
 											} catch (HeadlessException | SQLException e1) {
@@ -484,6 +491,7 @@ public class Giris {
 
 					try {
 						giris.dispose();
+						giris.setVisible(false);
 						metod(cd,rd,resd,sd,td,ed,hd,gm);
 					} catch (HeadlessException | SQLException e1) {
 						// TODO Auto-generated catch block

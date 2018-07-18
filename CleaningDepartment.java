@@ -246,277 +246,277 @@ public class CleaningDepartment extends JFrame implements ActionListener {
 		}
 		return rooms;
 	}
-	
-	
-	
+
+
+
 	//odanýn cleanliness durumunu 1 yapar. (yani oda artýk temiz göürünür);
-	
+
 	public void cleanRoom(int roomID) throws SQLException
 	{
 		Connection();
 
 		int roomNo;
-		
-		roomNo =dirtyRooms().get(roomID);
-		
 
-		
+		roomNo =dirtyRooms().get(roomID);
+
+
+
 		Statement st =  (Statement) con.createStatement();
 		((java.sql.Statement) st).executeUpdate("UPDATE rooms SET cleanliness ="+1+" Where room_no ="+roomNo);
-		
+
 		JOptionPane.showMessageDialog(frame5, "Room has been cleaned !");
 
 
 		frame5.dispose();
 		dirty();
 
-		
-		
+
+
 	}
-	
-	
+
+
 	//odadaki stok sayýsýný 1 arttýrýr;
-	
+
 	public void addStock(int roomID, int towelA, int soapA, int waterA, int shampooA) throws SQLException
 	{
-		
+
 		Connection();
 
 		int roomNo =0;
-		
+
 		roomNo =dirtyRooms().get(roomID);
 
-		
+
 		Statement st =  (Statement) con.createStatement();
 		((java.sql.Statement) st).executeUpdate("UPDATE rooms SET towel_room="+(towelA+1)+",water_room ="+(waterA+1)+",soap_room ="+(soapA+1)+
 				",shampoo_room ="+(shampooA+1)+" Where room_no ="+roomNo);
-		
 
 
-		
+
+
 	}
-	
+
 	//odadaki stok sayýsýný 1 azaltýr;
-	
+
 	public void removeStock(int roomID, int towelA, int soapA, int waterA, int shampooA) throws SQLException
 	{
-		
+
 		Connection();
 
 		int roomNo =0;
-		
+
 		roomNo =dirtyRooms().get(roomID);
 
 		if(towelA != 1 && soapA != 1 && waterA !=1 && shampooA != 1)
 		{
-		
-		Statement st =  (Statement) con.createStatement();
-		((java.sql.Statement) st).executeUpdate("UPDATE rooms SET towel_room="+(towelA-1)+",water_room ="+(waterA-1)+",soap_room ="+(soapA-1)+
-				",shampoo_room ="+(shampooA-1)+" Where room_no ="+roomNo);
-		
-		
+
+			Statement st =  (Statement) con.createStatement();
+			((java.sql.Statement) st).executeUpdate("UPDATE rooms SET towel_room="+(towelA-1)+",water_room ="+(waterA-1)+",soap_room ="+(soapA-1)+
+					",shampoo_room ="+(shampooA-1)+" Where room_no ="+roomNo);
+
+
 		}
-		
-		
+
+
 		else
 		{
-			
+
 			JOptionPane.showMessageDialog(frame5, "Stocks can not remove !");
 
 
 			frame5.dispose();
-			
+
 		}
 	}
 
-	
+
 	public int towel =0;
 	public int soap =0;
 	public int water =0;
 	public int shampoo=0;
 
-	
-	
+
+
 	//kirli odanýn stok bilgisi gösterir;
-	
+
 	public void roomDetail(int roomID) throws SQLException
 	{
 		Connection();
 
 		int roomNo;
-		
-		roomNo =dirtyRooms().get(roomID);
-		
 
-		
+		roomNo =dirtyRooms().get(roomID);
+
+
+
 		pst = con.prepareStatement("SELECT towel_room FROM rooms where room_no = "+roomNo);
 		rs = pst.executeQuery();
-		
+
 		while(rs.next()) 
 			towel = rs.getInt("towel_room");
 
-		
+
 		pst = con.prepareStatement("SELECT soap_room FROM rooms where room_no = "+roomNo);
 		rs = pst.executeQuery();
-		
+
 		while(rs.next())
 			soap = rs.getInt("soap_room");
-		
+
 		pst = con.prepareStatement("SELECT water_room FROM rooms where room_no = "+roomNo);
 		rs = pst.executeQuery();
-		
+
 		while(rs.next())
 			water = rs.getInt("water_room");
-		
+
 		pst = con.prepareStatement("SELECT shampoo_room FROM rooms where room_no = "+roomNo);
 		rs = pst.executeQuery();
-		
+
 		while(rs.next())
 			shampoo = rs.getInt("shampoo_room");
-		
-	
-	
+
+
+
 		frame5 = new JFrame("Room : "+roomNo);
 		//frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame5.setSize(500,500);
 		frame5.setLayout(null);
-		
 
-		
+
+
 		JLabel toweltext = new JLabel("Towel amount :");
 		JLabel soaptext = new JLabel("Soap amount :");
 		JLabel watertext = new JLabel("Water amount :");
 		JLabel shampootext = new JLabel("Shampoo amount :");
-		
-	
-	
-		
+
+
+
+
 		JTextField towelT = new JTextField();
 		JTextField soapT = new JTextField();
 		JTextField shampooT = new JTextField();
 		JTextField waterT = new JTextField();
-		
+
 		toweltext.setBounds(20, 60, 100, 30);
 		towelT.setBounds(130, 60, 100, 30);
-		
+
 		soaptext.setBounds(20, 100, 100, 30);
 		soapT.setBounds(130, 100, 100, 30);
-		
+
 		watertext.setBounds(20, 140, 100, 30);
 		waterT.setBounds(130, 140, 100, 30);
-		
+
 		shampootext.setBounds(20, 180, 100, 30);
 		shampooT.setBounds(130, 180, 100, 30);
-		
+
 		towelT.setText(towel+"");
 		soapT.setText(soap+"");
 		waterT.setText(water+"");
 		shampooT.setText(shampoo+"");
-		
+
 		JButton ekle = new JButton("Ekle");
 		JButton kaydet = new JButton("Temizliði Bitir");
 		JButton cikar = new JButton("Geri al");
-		
+
 		ekle.setBounds(110, 240, 120, 30);
 		kaydet.setBounds(110, 320, 120, 30);
 		cikar.setBounds(110,280,120,30);
-		
+
 		frame5.add(toweltext);
 		frame5.add(towelT);
-	
-		
+
+
 		frame5.add(soaptext);
 		frame5.add(soapT);
-	
-		
+
+
 		frame5.add(watertext);
 		frame5.add(waterT);
-	
-		
+
+
 		frame5.add(shampootext);
 		frame5.add(shampooT);
-		
+
 		frame5.add(ekle);
 		frame5.add(kaydet);
 		frame5.add(cikar);
-		
+
 		frame5.setVisible(true);
 		ekle.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				
+
 				try {
-					
+
 					addStock(roomID,towel,soap,water,shampoo);
-					
+
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				
-				
+
+
 				frame5.dispose();
-				
+
 				try {
 					roomDetail(roomID);
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
-	
-				
+
+
+
 			}
 		});
-		
-		
+
+
 		cikar.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
+
 				try {
-					
+
 					removeStock(roomID,towel,soap,water,shampoo);
-					
+
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				
+
 				frame5.dispose();
-				
+
 				try {
 					roomDetail(roomID);
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				
+
 			}
 		});
-		
-		
+
+
 		kaydet.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
+
 				try {
-					
+
 					cleanRoom(roomID);
-					
-					
+
+
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				
+
 			}
 		});
-			
-		
+
+
 	}
 
 
@@ -541,10 +541,10 @@ public class CleaningDepartment extends JFrame implements ActionListener {
 		String[] room2 = new String[dirtyRooms().size()];
 
 		try {
-			
+
 			for (int i = 0; i<dirtyRooms().size();i++)
-			room[i] = dirtyRooms().get(i);
-			
+				room[i] = dirtyRooms().get(i);
+
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -559,42 +559,42 @@ public class CleaningDepartment extends JFrame implements ActionListener {
 
 		JComboBox cmbRooms = new JComboBox(room2);
 		JLabel lblText = new JLabel("Oda No :");
-	
+
 		cmbRooms.setBounds(100,60,100,30);
 		lblText.setBounds(20,60,100,30);
-		
-	
+
+
 		cmbRooms.setSelectedIndex(0);
 		cmbRooms.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				
+
 				int selectedRoom = cmbRooms.getSelectedIndex();
-				
+
 				try {
-					
+
 					roomDetail(selectedRoom);
 					frame2.dispose();
-					
+
 				} catch (SQLException e) {
-					
+
 					e.printStackTrace();
 				}
-				
+
 			}
 		});
-		
-		
-		
-		
+
+
+
+
 		frame2.add(cmbRooms);
 		frame2.add(lblText);
 
 
 
 		frame2.setVisible(true);
-		
+
 
 	}
 
@@ -818,12 +818,12 @@ public class CleaningDepartment extends JFrame implements ActionListener {
 
 		return frame3;
 	}
-	
+
 	public void izinGunuDegistir() {
-		JFrame vardiya = new JFrame("Shift Changer");
+		JFrame vardiya = new JFrame("Ýzin Günü Deðiþtirme");
 		vardiya.setSize(500,500);
 		vardiya.setLayout(null);
-		
+
 		JButton change = new JButton("Change Day-Off");
 		JLabel empIDLab = new JLabel("Employee ID:");
 		JTextField empID = new JTextField();
@@ -837,7 +837,7 @@ public class CleaningDepartment extends JFrame implements ActionListener {
 		newDay.addItem("Saturday");
 		newDay.addItem("Sunday");
 		newDay.setSelectedIndex(0);
-		
+
 		empIDLab.setBounds(20, 60, 100, 30);
 		empID.setBounds(130, 60, 100, 30);
 		newDayLab.setBounds(20, 100, 100, 30);
@@ -864,21 +864,42 @@ public class CleaningDepartment extends JFrame implements ActionListener {
 			}
 		});
 	}
-	
+
 	public void setIzinGunu(String id, String dayOff) throws SQLException {
 		Connection();
-		
+
 		int update=0;
-		String a = "UPDATE employees SET day_offs = '" + dayOff + "' WHERE emp_id = " + id;
-		pst = con.prepareStatement(a);
-		update = pst.executeUpdate();
+
+		if(!id.contains("1") && !id.contains("2") && !id.contains("3") && !id.contains("4") && !id.contains("5") 
+				&& !id.contains("6") && !id.contains("7") && !id.contains("8") && !id.contains("9") && !id.contains("0") 
+				|| id.contains("+") || id.contains("-") || id.contains("*") || id.contains("/"))
+		{
+
+
+			JOptionPane.showMessageDialog(null, "Geçerli ID girin !");
+
+		}
+		else {
+
+			if(Integer.parseInt(id)<17008 && Integer.parseInt(id)>11000) {
+
+				String a = "UPDATE employees SET day_offs = '" + dayOff + "' WHERE emp_id = " + id;
+				pst = con.prepareStatement(a);
+				update = pst.executeUpdate();
+				
+				JOptionPane.showMessageDialog(null, "Day-off has been changed !");
+			}
+			else
+				JOptionPane.showMessageDialog(null, "Geçerli ID girin !");
+
+		}
 	}
-	
+
 	public void vardiyaDegistir() {
 		JFrame vardiya = new JFrame("Vardiya Degistirme");
 		vardiya.setSize(500,500);
 		vardiya.setLayout(null);
-		
+
 		JButton change = new JButton("Change Shift");
 		JLabel empIDLab = new JLabel("Employee ID:");
 		JTextField empID = new JTextField();
@@ -888,7 +909,7 @@ public class CleaningDepartment extends JFrame implements ActionListener {
 		newShift.addItem("Evening");
 		newShift.addItem("Night");
 		newShift.setSelectedIndex(0);
-		
+
 		empIDLab.setBounds(20, 60, 100, 30);
 		empID.setBounds(130, 60, 100, 30);
 		newShiftLab.setBounds(20, 100, 100, 30);
@@ -914,42 +935,60 @@ public class CleaningDepartment extends JFrame implements ActionListener {
 			}
 		});
 	}
-	
+
 	public void setVardiya(String id, int shift) throws SQLException {
 		Connection();
-		
+
 		int update=0;
-		String a = "UPDATE employees SET shift = " + shift + " WHERE emp_id = " + id;
-		pst = con.prepareStatement(a);
-		update = pst.executeUpdate();
+
+		if(!id.contains("1") && !id.contains("2") && !id.contains("3") && !id.contains("4") && !id.contains("5") 
+				&& !id.contains("6") && !id.contains("7") && !id.contains("8") && !id.contains("9") && !id.contains("0") 
+				|| id.contains("+") || id.contains("-") || id.contains("*") || id.contains("/"))
+		{
+
+
+			JOptionPane.showMessageDialog(null, "Geçerli ID girin !");
+
+		}
+		else {
+
+			if(Integer.parseInt(id)<17008 && Integer.parseInt(id)>11000) {
+				String a = "UPDATE employees SET shift = " + shift + " WHERE emp_id = " + id;
+				pst = con.prepareStatement(a);
+				update = pst.executeUpdate();
+				JOptionPane.showMessageDialog(null, "Shift has been changed !");
+			}
+			else
+				JOptionPane.showMessageDialog(null, "Geçerli ID girin !");
+		}
 	}
 
 
 
 	public void showGUI1(boolean isMgr) throws SQLException {
 
-		
-		
+
+
 		kirliodalar = new JButton("Kirli Odalar");
 		vardiyadegistir = new JButton("Vardiya Degistir");
 		expenses = new JButton("Expenses");
 		izinGunu = new JButton("Set Day Off");
 
 		frame = new JFrame("Cleaning Departmant");
-		frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-	
+		//frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+
 
 		frame.setSize(500,500);
 		frame.setLayout(null);
 
 		if(isMgr)
 		{
-			
+
 			vardiyadegistir.setBounds(20, 60, 160, 30);
 			izinGunu.setBounds(20, 100, 160, 30);
 			expenses.setBounds(20, 140, 160, 30);
 			kirliodalar.setBounds(20, 180, 160, 30);
-			
+
 			frame.add(vardiyadegistir);
 			frame.add(expenses);
 			frame.add(kirliodalar);
@@ -963,9 +1002,9 @@ public class CleaningDepartment extends JFrame implements ActionListener {
 				public void actionPerformed(ActionEvent e) {
 
 					try {
-						
+
 						dirty();
-						
+
 					} catch (SQLException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -989,8 +1028,8 @@ public class CleaningDepartment extends JFrame implements ActionListener {
 
 				}				
 			});
-			
-			
+
+
 			izinGunu.addActionListener(new ActionListener(){
 				public void actionPerformed(ActionEvent event)
 				{
@@ -1004,7 +1043,7 @@ public class CleaningDepartment extends JFrame implements ActionListener {
 					vardiyaDegistir();
 				}
 			});
-			
+
 
 		}//if(isMng)
 
@@ -1022,9 +1061,9 @@ public class CleaningDepartment extends JFrame implements ActionListener {
 				public void actionPerformed(ActionEvent e) {
 
 					try {
-						
+
 						dirty();
-						
+
 					} catch (SQLException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -1037,8 +1076,8 @@ public class CleaningDepartment extends JFrame implements ActionListener {
 
 
 		}//else
-		
-		
+
+
 	}
 
 	@Override

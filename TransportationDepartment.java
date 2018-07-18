@@ -11,6 +11,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
@@ -88,7 +89,7 @@ public class TransportationDepartment extends JFrame implements ActionListener{
 
 		GridLayout layout = new GridLayout(6,6);
 		frame2 = new JFrame("Fuel Expenses");
-		frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame2.setSize(500,500);
 		frame2.setLayout(layout);
 
@@ -120,7 +121,7 @@ public class TransportationDepartment extends JFrame implements ActionListener{
 	{
 
 		frame2 = new JFrame("Cars");
-		frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame2.setSize(500,500);
 		frame2.setLayout(null);
 
@@ -144,7 +145,7 @@ public class TransportationDepartment extends JFrame implements ActionListener{
 	
 
 	public void izinGunuDegistir() {
-		JFrame vardiya = new JFrame("Shift Changer");
+		JFrame vardiya = new JFrame("Ýzin Günü Deðiþtirme");
 		vardiya.setSize(500,500);
 		vardiya.setLayout(null);
 
@@ -193,9 +194,30 @@ public class TransportationDepartment extends JFrame implements ActionListener{
 		Connection();
 
 		int update=0;
-		String a = "UPDATE employees SET day_offs = '" + dayOff + "' WHERE emp_id = " + id;
-		pst = con.prepareStatement(a);
-		update = pst.executeUpdate();
+
+		if(!id.contains("1") && !id.contains("2") && !id.contains("3") && !id.contains("4") && !id.contains("5") 
+				&& !id.contains("6") && !id.contains("7") && !id.contains("8") && !id.contains("9") && !id.contains("0") 
+				|| id.contains("+") || id.contains("-") || id.contains("*") || id.contains("/"))
+		{
+
+
+			JOptionPane.showMessageDialog(null, "Geçerli ID girin !");
+
+		}
+		else {
+
+			if(Integer.parseInt(id)<17008 && Integer.parseInt(id)>11000) {
+
+				String a = "UPDATE employees SET day_offs = '" + dayOff + "' WHERE emp_id = " + id;
+				pst = con.prepareStatement(a);
+				update = pst.executeUpdate();
+				
+				JOptionPane.showMessageDialog(null, "Day-off has been changed !");
+			}
+			else
+				JOptionPane.showMessageDialog(null, "Geçerli ID girin !");
+
+		}
 	}
 
 
@@ -207,7 +229,7 @@ public class TransportationDepartment extends JFrame implements ActionListener{
 		expenses = new JButton("Expenses");
 		izinGunu = new JButton("Set day Off");
 
-		frame = new JFrame();
+		frame = new JFrame("Transportation Department");
 
 		frame.setSize(500,500);
 		frame.setLayout(null);
@@ -372,9 +394,27 @@ public class TransportationDepartment extends JFrame implements ActionListener{
 		Connection();
 
 		int update=0;
-		String a = "UPDATE employees SET shift = " + shift + " WHERE emp_id = " + id;
-		pst = con.prepareStatement(a);
-		update = pst.executeUpdate();
+
+		if(!id.contains("1") && !id.contains("2") && !id.contains("3") && !id.contains("4") && !id.contains("5") 
+				&& !id.contains("6") && !id.contains("7") && !id.contains("8") && !id.contains("9") && !id.contains("0") 
+				|| id.contains("+") || id.contains("-") || id.contains("*") || id.contains("/"))
+		{
+
+
+			JOptionPane.showMessageDialog(null, "Geçerli ID girin !");
+
+		}
+		else {
+
+			if(Integer.parseInt(id)<17008 && Integer.parseInt(id)>11000) {
+				String a = "UPDATE employees SET shift = " + shift + " WHERE emp_id = " + id;
+				pst = con.prepareStatement(a);
+				update = pst.executeUpdate();
+				JOptionPane.showMessageDialog(null, "Shift has been changed !");
+			}
+			else
+				JOptionPane.showMessageDialog(null, "Geçerli ID girin !");
+		}
 	}
 
 
