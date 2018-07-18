@@ -195,7 +195,25 @@ public class Giris {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
-				int user = Integer.parseInt(id.getText());
+				String kontrol = id.getText();
+				if(!kontrol.contains("1") && !kontrol.contains("2") && !kontrol.contains("3") && !kontrol.contains("4") && !kontrol.contains("5") 
+						&& !kontrol.contains("6") && !kontrol.contains("7") && !kontrol.contains("8") && !kontrol.contains("9") && !kontrol.contains("0"))
+				{
+					JOptionPane.showMessageDialog(giris, "Geçerli ID girin !");
+	
+					try {
+						giris.dispose();
+						metod(cd, rd, resd, sd, td, ed, hd, gm);
+					} catch (HeadlessException | SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					
+				}
+				else {
+				
+					System.out.println(kontrol);
+				int user = Integer.parseInt(kontrol);
 				
 				
 				if(11000<user && user<17008 || user ==10000) {
@@ -462,8 +480,10 @@ public class Giris {
 
 				else 
 				{
+					JOptionPane.showMessageDialog(giris, "Geçerli ID girin !");
 
 					try {
+						giris.dispose();
 						metod(cd,rd,resd,sd,td,ed,hd,gm);
 					} catch (HeadlessException | SQLException e1) {
 						// TODO Auto-generated catch block
@@ -473,7 +493,7 @@ public class Giris {
 
 				}
 
-
+				}//yanlýþ girdi deðilse
 			}
 		});
 

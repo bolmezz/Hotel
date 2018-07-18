@@ -51,13 +51,18 @@ public class EntertainmentDepartment {
 		vardiyadegistir = new JButton("Vardiya Degistir");
 		expenses = new JButton("Expenses");
 		aktiviteEkle = new JButton("New Activity");
-		GridLayout layout = new GridLayout(6,6);
+		/*GridLayout layout = new GridLayout(6,6);
 		layout.setHgap(60);
-		layout.setVgap(60);
+		layout.setVgap(60);*/
 		frame = new JFrame("Entertainment Department");
 		
 		frame.setSize(500,500);
-		frame.setLayout(layout);
+		frame.setLayout(null);
+		
+		izinGunu.setBounds(20, 60, 160, 30);
+		vardiyadegistir.setBounds(20, 100, 160, 30);
+		expenses.setBounds(20, 140, 160, 30);
+		aktiviteEkle.setBounds(20, 60, 160, 30);
 
 		frame.setVisible(true);
 
