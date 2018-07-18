@@ -11,6 +11,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 public class EntertainmentDepartment {
@@ -133,6 +134,8 @@ public class EntertainmentDepartment {
 					pst = con.prepareStatement(a);
 					System.out.println(pst);
 					update = pst.executeUpdate();
+
+					JOptionPane.showMessageDialog(aktivite, "Activity added !");
 					System.out.println("updated");
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
@@ -177,8 +180,8 @@ public class EntertainmentDepartment {
 				try {
 					String selectedDayOff = (String) newDay.getSelectedItem();
 					setIzinGunu(empID.getText(),selectedDayOff);
-					vardiya.setVisible(false);
 
+					JOptionPane.showMessageDialog(vardiya, "Day-off has been changed !");
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -227,7 +230,8 @@ public class EntertainmentDepartment {
 				try {
 					int selectedVardiya = newShift.getSelectedIndex();
 					setVardiya(empID.getText(),selectedVardiya);
-					vardiya.setVisible(false);
+
+					JOptionPane.showMessageDialog(vardiya, "Shift has been changed !");
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

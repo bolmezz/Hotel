@@ -11,6 +11,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 public class HealthDepartment {
@@ -139,7 +140,8 @@ public class HealthDepartment {
 							String desc = description.getText();
 							String telNoInfo = tel_no.getText();
 							kayitAl(tcInfo, desc, telNoInfo);
-							hastaFrame.setVisible(false);
+
+							JOptionPane.showMessageDialog(hastaFrame, "Patients info has been taken !");
 						}
 					});
 				}
@@ -198,8 +200,7 @@ public class HealthDepartment {
 				try {
 					String selectedDayOff = (String) newDay.getSelectedItem();
 					setIzinGunu(empID.getText(),selectedDayOff);
-					vardiya.setVisible(false);
-
+					JOptionPane.showMessageDialog(vardiya, "Shift has been changed !");
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -248,7 +249,7 @@ public class HealthDepartment {
 				try {
 					int selectedVardiya = newShift.getSelectedIndex();
 					setVardiya(empID.getText(),selectedVardiya);
-					vardiya.setVisible(false);
+					JOptionPane.showMessageDialog(vardiya, "Day-off has been changed !");
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
