@@ -172,7 +172,7 @@ public class HealthDepartment {
 		}
 	}
 	public void izinGunuDegistir() {
-		JFrame vardiya = new JFrame("Ýzin Günü Deðiþtirme");
+		JFrame vardiya = new JFrame("ï¿½zin Gï¿½nï¿½ Deï¿½iï¿½tirme");
 		vardiya.setSize(500,500);
 		vardiya.setLayout(null);
 		
@@ -205,8 +205,13 @@ public class HealthDepartment {
 			public void actionPerformed(ActionEvent event)
 			{
 				try {
-					String selectedDayOff = (String) newDay.getSelectedItem();
-					setIzinGunu(empID.getText(),selectedDayOff);
+					if(!empID.getText().startsWith("15")) {
+						JOptionPane.showMessageDialog(null, "You can only change your departments employees !");
+					}
+					else {
+						String selectedDayOff = (String) newDay.getSelectedItem();
+						setIzinGunu(empID.getText(),selectedDayOff);
+					}
 					//JOptionPane.showMessageDialog(vardiya, "Shift has been changed !");
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
@@ -227,7 +232,7 @@ public class HealthDepartment {
 		{
 
 
-			JOptionPane.showMessageDialog(null, "Geçerli ID girin !");
+			JOptionPane.showMessageDialog(null, "Geï¿½erli ID girin !");
 
 		}
 		else {
@@ -241,7 +246,7 @@ public class HealthDepartment {
 				JOptionPane.showMessageDialog(null, "Day-off has been changed !");
 			}
 			else
-				JOptionPane.showMessageDialog(null, "Geçerli ID girin !");
+				JOptionPane.showMessageDialog(null, "Geï¿½erli ID girin !");
 
 		}
 	}
@@ -275,9 +280,13 @@ public class HealthDepartment {
 			public void actionPerformed(ActionEvent event)
 			{
 				try {
-					int selectedVardiya = newShift.getSelectedIndex();
-					setVardiya(empID.getText(),selectedVardiya);
-					
+					if(!empID.getText().startsWith("15")) {
+						JOptionPane.showMessageDialog(null, "You can only change your departments employees !");
+					}
+					else {
+						int selectedVardiya = newShift.getSelectedIndex();
+						setVardiya(empID.getText(),selectedVardiya);
+					}
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -297,7 +306,7 @@ public class HealthDepartment {
 		{
 
 
-			JOptionPane.showMessageDialog(null, "Geçerli ID girin !");
+			JOptionPane.showMessageDialog(null, "Geï¿½erli ID girin !");
 
 		}
 		else {
@@ -310,7 +319,7 @@ public class HealthDepartment {
 				JOptionPane.showMessageDialog(null, "Shift has been changed !");
 			}
 			else
-				JOptionPane.showMessageDialog(null, "Geçerli ID girin !");
+				JOptionPane.showMessageDialog(null, "Geï¿½erli ID girin !");
 		}
 	}
 	

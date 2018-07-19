@@ -1180,7 +1180,7 @@ public class ReceptionDepartment {
 	}
 
 	public void izinGunuDegistir() {
-		JFrame vardiya = new JFrame("Ýzin Günü Dedðiþtirme");
+		JFrame vardiya = new JFrame("Izin Günü Dedgistirme");
 		vardiya.setSize(500,500);
 		vardiya.setLayout(null);
 
@@ -1213,9 +1213,13 @@ public class ReceptionDepartment {
 			public void actionPerformed(ActionEvent event)
 			{
 				try {
+					if(!empID.getText().startsWith("17")) {
+						JOptionPane.showMessageDialog(null, "You can only change your departments employees !");
+					}
+					else {
 					String selectedDayOff = (String) newDay.getSelectedItem();
 					setIzinGunu(empID.getText(),selectedDayOff);
-
+					}
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -1283,9 +1287,13 @@ public class ReceptionDepartment {
 			public void actionPerformed(ActionEvent event)
 			{
 				try {
-					int selectedVardiya = newShift.getSelectedIndex();
-					setVardiya(empID.getText(),selectedVardiya);
-					//JOptionPane.showMessageDialog(vardiya, "Shift has been changed !");
+					if(!empID.getText().startsWith("17")) {
+						JOptionPane.showMessageDialog(null, "You can only change your departments employees !");
+					}
+					else {
+						int selectedVardiya = newShift.getSelectedIndex();
+						setVardiya(empID.getText(),selectedVardiya);
+					}
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
