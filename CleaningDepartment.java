@@ -395,6 +395,11 @@ public class CleaningDepartment extends JFrame implements ActionListener {
 		JTextField soapT = new JTextField();
 		JTextField shampooT = new JTextField();
 		JTextField waterT = new JTextField();
+		
+		towelT.setEditable(false);
+		soapT.setEditable(false);
+		shampooT.setEditable(false);
+		waterT.setEditable(false);
 
 		toweltext.setBounds(20, 60, 100, 30);
 		towelT.setBounds(130, 60, 100, 30);
@@ -1072,12 +1077,8 @@ public class CleaningDepartment extends JFrame implements ActionListener {
 				}				
 			});
 
-
-
-
 		}//else
-
-
+	
 	}
 
 	@Override
