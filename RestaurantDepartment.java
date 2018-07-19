@@ -190,7 +190,7 @@ public class RestaurantDepartment {
 		((java.sql.Statement) st).executeUpdate("UPDATE rest_tables SET cleanliness =1 ,table_order = 0 ,order_detail= '' ");
 
 
-		JOptionPane.showMessageDialog(frame2, "Masalar temizlendi !");
+		JOptionPane.showMessageDialog(frame2, "Tables has been cleaned !");
 
 		frame2.dispose();
 		restaurant();
@@ -207,9 +207,10 @@ public class RestaurantDepartment {
 		((java.sql.Statement) st).executeUpdate("UPDATE rest_tables SET cleanliness =1 ,table_order = 0 ,order_detail= '' ");
 
 
-		JOptionPane.showMessageDialog(frame6, "Masalar temizlendi !");
+		JOptionPane.showMessageDialog(frame6, "Tables has been cleaned !");
 
 		frame6.dispose();
+		frame6.setVisible(false);
 		acikBuf();
 
 	}
@@ -245,9 +246,10 @@ public class RestaurantDepartment {
 		((java.sql.Statement) st).executeUpdate("UPDATE rest_stands set is_empty = 1 where stand_name = '"+ stand +"'");
 		
 		
-		JOptionPane.showMessageDialog(frame6, stand+ " is full !");
+		JOptionPane.showMessageDialog(frame6, stand+ " has been filled!");
 		
 		frame6.dispose();
+		frame6.setVisible(false);
 		acikBuf();
 		
 	}
@@ -365,7 +367,7 @@ public class RestaurantDepartment {
 		conceptDetail.setBounds(20, 100, 120, 30);
 		concept.setBounds(140, 100, 120, 30);
 
-		cleanTables.setBounds(140, 140, 120, 30);
+		cleanTables.setBounds(140, 140, 160, 30);
 
 
 		frame2.add(conceptDetail);
@@ -424,7 +426,7 @@ public class RestaurantDepartment {
 	public void restManager()
 	{
 
-		//	Connection();
+			Connection();
 
 		frame4 = new JFrame("Restaurant Manager Page");
 		frame4.setSize(500, 500);
@@ -452,6 +454,8 @@ public class RestaurantDepartment {
 
 					Statement st =  (Statement) con.createStatement();
 					((java.sql.Statement) st).executeUpdate("UPDATE restaurant_dept SET concept =  '"+conc.getText()+"'");
+					
+					JOptionPane.showMessageDialog(frame4, "Concept has been changed !");
 					frame4.dispose();
 
 				} catch (SQLException e1) {
@@ -500,7 +504,7 @@ public class RestaurantDepartment {
 		((java.sql.Statement) st).executeUpdate("UPDATE rest_stands set is_empty = 0 where stand_name = '"+ stand +"'");
 		
 		
-		JOptionPane.showMessageDialog(frame5, stand+ " is empty !");
+		JOptionPane.showMessageDialog(frame5, stand+ " is empty now !");
 		
 		frame5.dispose();
 		acikManager();
@@ -517,7 +521,7 @@ public class RestaurantDepartment {
 		((java.sql.Statement) st).executeUpdate("UPDATE rest_stands set is_open = 1 where stand_name = '"+ stand +"'");
 		
 		
-		JOptionPane.showMessageDialog(frame5, stand+ " is open !");
+		JOptionPane.showMessageDialog(frame5, stand+ " is open now !");
 		
 		frame5.dispose();
 		acikManager();
@@ -533,7 +537,7 @@ public class RestaurantDepartment {
 		((java.sql.Statement) st).executeUpdate("UPDATE rest_stands set is_open = 0 where stand_name = '"+ stand +"'");
 		
 		
-		JOptionPane.showMessageDialog(frame5, stand+ " is close !");
+		JOptionPane.showMessageDialog(frame5, stand+ "  is close now!");
 		
 		frame5.dispose();
 		acikManager();

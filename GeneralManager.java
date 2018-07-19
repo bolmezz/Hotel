@@ -365,7 +365,8 @@ public class GeneralManager extends JFrame implements ActionListener {
 
 
 					frame3.dispose();
-					showGui10();
+					//showGui10();
+					assignManager();
 
 					break;
 				}
@@ -611,7 +612,8 @@ public class GeneralManager extends JFrame implements ActionListener {
 							JOptionPane.showMessageDialog(frame4, "Manager ("+id+") has been discharged !");
 
 							frame4.dispose();
-							showGui10();
+							//showGui10();
+							dismissEmployee();
 
 						}
 						else
@@ -619,7 +621,8 @@ public class GeneralManager extends JFrame implements ActionListener {
 							JOptionPane.showMessageDialog(frame4, "Manager has not been discharged !");
 
 							frame4.dispose();
-							showGui10();
+							//showGui10();
+							dismissEmployee();
 
 
 						}
@@ -712,7 +715,7 @@ public class GeneralManager extends JFrame implements ActionListener {
 						JOptionPane.showMessageDialog(frame4, "Employee ("+id+") has been discharged !");
 
 						frame4.dispose();
-						showGui10();
+						dismissEmployee();
 
 						
 						break;

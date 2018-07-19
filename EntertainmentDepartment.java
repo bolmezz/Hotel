@@ -133,7 +133,7 @@ public class EntertainmentDepartment {
 			{
 				Connection();
 				
-				String a = "INSERT INTO entertainment_dept (activity_desc, entertainment_expenses) VALUES ('"+ activityDesc.getText() + "', '" + activityPrice.getText() + "')";
+				String a = "INSERT INTO entertainment_dept (activity_desc, entertainment_expenses) VALUES ('"+ activityDesc.getText() + "', '" + Integer.parseInt(activityPrice.getText()) + "')";
 				try {
 					int update;
 					pst = con.prepareStatement(a);
