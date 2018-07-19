@@ -183,9 +183,13 @@ public class EntertainmentDepartment {
 			public void actionPerformed(ActionEvent event)
 			{
 				try {
-					String selectedDayOff = (String) newDay.getSelectedItem();
-					setIzinGunu(empID.getText(),selectedDayOff);
-
+					if(!empID.getText().startsWith("13")) {
+						JOptionPane.showMessageDialog(null, "You can only change your departments employees !");
+					}
+					else {
+							String selectedDayOff = (String) newDay.getSelectedItem();
+							setIzinGunu(empID.getText(),selectedDayOff);
+					}
 					//JOptionPane.showMessageDialog(vardiya, "Day-off has been changed !");
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
@@ -254,9 +258,13 @@ public class EntertainmentDepartment {
 			public void actionPerformed(ActionEvent event)
 			{
 				try {
-					int selectedVardiya = newShift.getSelectedIndex();
-					setVardiya(empID.getText(),selectedVardiya);
-
+					if(!empID.getText().startsWith("13")) {
+						JOptionPane.showMessageDialog(null, "You can only change your departments employees !");
+					}
+					else {
+						int selectedVardiya = newShift.getSelectedIndex();
+						setVardiya(empID.getText(),selectedVardiya);
+					}
 					//JOptionPane.showMessageDialog(vardiya, "Shift has been changed !");
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block

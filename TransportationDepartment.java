@@ -178,10 +178,14 @@ public class TransportationDepartment extends JFrame implements ActionListener{
 			public void actionPerformed(ActionEvent event)
 			{
 				try {
-					String selectedDayOff = (String) newDay.getSelectedItem();
-					setIzinGunu(empID.getText(),selectedDayOff);
-					vardiya.setVisible(false);
-
+					if(!empID.getText().startsWith("12")) {
+						JOptionPane.showMessageDialog(null, "You can only change your departments employees !");
+					}
+					else {
+						String selectedDayOff = (String) newDay.getSelectedItem();
+						setIzinGunu(empID.getText(),selectedDayOff);
+						vardiya.setVisible(false);
+					}
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -380,9 +384,14 @@ public class TransportationDepartment extends JFrame implements ActionListener{
 			public void actionPerformed(ActionEvent event)
 			{
 				try {
-					int selectedVardiya = newShift.getSelectedIndex();
-					setVardiya(empID.getText(),selectedVardiya);
-					vardiya.setVisible(false);
+					if(!empID.getText().startsWith("12")) {
+						JOptionPane.showMessageDialog(null, "You can only change your departments employees !");
+					}
+					else {
+						int selectedVardiya = newShift.getSelectedIndex();
+						setVardiya(empID.getText(),selectedVardiya);
+						vardiya.setVisible(false);
+					}
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
