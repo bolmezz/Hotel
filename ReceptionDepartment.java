@@ -52,7 +52,7 @@ public class ReceptionDepartment {
 
 			con = DriverManager.getConnection(
 					"jdbc:postgresql://localhost/Hotel", "postgres",
-					"08040094");
+					"123412");
 
 
 		} catch (SQLException e) {
@@ -462,80 +462,91 @@ public class ReceptionDepartment {
 			public void actionPerformed(ActionEvent event)
 			{	
 				try {
-					String room = (String) rooms.getSelectedItem();
-
-					Date now1 = new Date();
-					DateFormat gf = new SimpleDateFormat("yyyy-MM-dd");
-					String out = gf.format(now1);
-					System.out.println("asj: " + out);
-					int update;
-					String a;					
-
-					a = "UPDATE guest SET check_out_date = '" + out + "' WHERE g_room_no = " + room;
-					pst = con.prepareStatement(a);
-					update = pst.executeUpdate();
-					System.out.println(pst);
-					System.out.println("updated");
-
-					expenses2(room);
-
-					a = "UPDATE rooms SET isempty = 1 WHERE room_no = " + room;
-					pst = con.prepareStatement(a);
-					update = pst.executeUpdate();
-					System.out.println("updated");
-
-					a = "UPDATE rooms SET cleanliness = 0 WHERE room_no = " + room;
-					pst = con.prepareStatement(a);
-					update = pst.executeUpdate();
+					
+					if(!puan.getText().contains("1") && !puan.getText().contains("2") && !puan.getText().contains("3") && !puan.getText().contains("4") && !puan.getText().contains("5") 
+							&& !puan.getText().contains("6") && !puan.getText().contains("7") && !puan.getText().contains("8") && !puan.getText().contains("9") && !puan.getText().contains("0") 
+							|| puan.getText().contains("+") || puan.getText().contains("-") || puan.getText().contains("*") || puan.getText().contains("/") || puan.getText().equals(""))
+					{
 
 
-					a = "DELETE FROM guest WHERE g_room_no = " + room;
-					pst = con.prepareStatement(a);
-					update = pst.executeUpdate();
+						JOptionPane.showMessageDialog(null, "You must give a score to the room !");
 
-
-					a = "UPDATE rooms SET score = score +" + Integer.parseInt(puan.getText()) + " WHERE room_no = " + room;
-					pst = con.prepareStatement(a);
-					update = pst.executeUpdate();
-
-					a = "UPDATE rooms SET breakfast_number = 0 WHERE room_no = " + room;
-					pst = con.prepareStatement(a);
-					update = pst.executeUpdate();
-
-					a = "UPDATE rooms SET dinner_number = 0 WHERE room_no = " + room;
-					pst = con.prepareStatement(a);
-					update = pst.executeUpdate();
-
-					a = "UPDATE rooms SET laundry_number = 0 WHERE room_no = " + room;
-					pst = con.prepareStatement(a);
-					update = pst.executeUpdate();
-
-					a = "UPDATE rooms SET massage_number = 0 WHERE room_no = " + room;
-					pst = con.prepareStatement(a);
-					update = pst.executeUpdate();
-
-					a = "UPDATE rooms SET transportation_number = 0 WHERE room_no = " + room;
-					pst = con.prepareStatement(a);
-					update = pst.executeUpdate();
-
-					a = "UPDATE rooms SET towel_room = 0 WHERE room_no = " + room;
-					pst = con.prepareStatement(a);
-					update = pst.executeUpdate();
-
-					a = "UPDATE rooms SET soap_room = 0 WHERE room_no = " + room;
-					pst = con.prepareStatement(a);
-					update = pst.executeUpdate();
-
-					a = "UPDATE rooms SET shampoo_room = 0 WHERE room_no = " + room;
-					pst = con.prepareStatement(a);
-					update = pst.executeUpdate();
-
-					a = "UPDATE rooms SET water_room = 0 WHERE room_no = " + room;
-					pst = con.prepareStatement(a);
-					update = pst.executeUpdate();
-
-					expenses.dispose();
-
+					}
+					else {
+						String room = (String) rooms.getSelectedItem();
+		
+						Date now1 = new Date();
+						DateFormat gf = new SimpleDateFormat("yyyy-MM-dd");
+						String out = gf.format(now1);
+						System.out.println("asj: " + out);
+						int update;
+						String a;					
+		
+						a = "UPDATE guest SET check_out_date = '" + out + "' WHERE g_room_no = " + room;
+						pst = con.prepareStatement(a);
+						update = pst.executeUpdate();
+						System.out.println(pst);
+						System.out.println("updated");
+		
+						expenses2(room);
+		
+						a = "UPDATE rooms SET isempty = 1 WHERE room_no = " + room;
+						pst = con.prepareStatement(a);
+						update = pst.executeUpdate();
+						System.out.println("updated");
+		
+						a = "UPDATE rooms SET cleanliness = 0 WHERE room_no = " + room;
+						pst = con.prepareStatement(a);
+						update = pst.executeUpdate();
+		
+		
+						a = "DELETE FROM guest WHERE g_room_no = " + room;
+						pst = con.prepareStatement(a);
+						update = pst.executeUpdate();
+		
+		
+						a = "UPDATE rooms SET score = score +" + Integer.parseInt(puan.getText()) + " WHERE room_no = " + room;
+						pst = con.prepareStatement(a);
+						update = pst.executeUpdate();
+		
+						a = "UPDATE rooms SET breakfast_number = 0 WHERE room_no = " + room;
+						pst = con.prepareStatement(a);
+						update = pst.executeUpdate();
+		
+						a = "UPDATE rooms SET dinner_number = 0 WHERE room_no = " + room;
+						pst = con.prepareStatement(a);
+						update = pst.executeUpdate();
+		
+						a = "UPDATE rooms SET laundry_number = 0 WHERE room_no = " + room;
+						pst = con.prepareStatement(a);
+						update = pst.executeUpdate();
+		
+						a = "UPDATE rooms SET massage_number = 0 WHERE room_no = " + room;
+						pst = con.prepareStatement(a);
+						update = pst.executeUpdate();
+		
+						a = "UPDATE rooms SET transportation_number = 0 WHERE room_no = " + room;
+						pst = con.prepareStatement(a);
+						update = pst.executeUpdate();
+		
+						a = "UPDATE rooms SET towel_room = 0 WHERE room_no = " + room;
+						pst = con.prepareStatement(a);
+						update = pst.executeUpdate();
+		
+						a = "UPDATE rooms SET soap_room = 0 WHERE room_no = " + room;
+						pst = con.prepareStatement(a);
+						update = pst.executeUpdate();
+		
+						a = "UPDATE rooms SET shampoo_room = 0 WHERE room_no = " + room;
+						pst = con.prepareStatement(a);
+						update = pst.executeUpdate();
+		
+						a = "UPDATE rooms SET water_room = 0 WHERE room_no = " + room;
+						pst = con.prepareStatement(a);
+						update = pst.executeUpdate();
+		
+						expenses.dispose();
+					}
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -1127,8 +1138,41 @@ public class ReceptionDepartment {
 
 				JOptionPane.showMessageDialog(checkIn, "Guests are added to the database !");
 
+				tcNo.setText("");
+				name.setText("");
+				last_name.setText("");
+				tel_no.setText("");
+				title.setText("");
 
+				tcNo2.setText("");
+				name2.setText("");
+				last_name2.setText("");
+				tel_no2.setText("");
+				title2.setText("");
 
+				tcNo3.setText("");
+				name3.setText("");
+				last_name3.setText("");
+				tel_no3.setText("");
+				title3.setText("");
+
+				freeRooms.removeAllItems();
+				int[] msg_amount = new int[1];
+				try {
+					pst = con.prepareStatement("SELECT room_no FROM rooms WHERE isempty = 1 and cleanliness=1 ORDER BY room_no ASC");
+					rs = pst.executeQuery();
+
+					while(rs.next()) {
+						msg_amount[0] = rs.getInt("room_no");
+						freeRooms.addItem(msg_amount[0]+"");
+					}
+					
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				
 			}			
 		});
 
